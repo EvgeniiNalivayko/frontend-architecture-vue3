@@ -1,0 +1,2978 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Frontend Handbook — Vue 3 / JavaScript</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800;900&family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/atelier-cave.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+:root{
+  --paper:#f5f2ec; --paper-2:#ece7dd; --panel:#fffdf8;
+  --ink:#1b1a17; --ink-soft:#403d36; --muted:#736d62; --faint:#9a9384;
+  --rule:#ddd6c8; --rule-soft:#e8e2d6;
+  --accent:#0f6b63; --accent-deep:#0a4f49; --accent-soft:#e2efed;
+  --amber:#a8650a; --amber-soft:#f6ead6;
+  --rose:#9e2b33; --rose-soft:#f6e2e2;
+  --blue:#2a5d86; --blue-soft:#e3edf5;
+  --violet:#5b4a8a; --violet-soft:#ece8f5;
+  --code-bg:#1b1e27; --code-head:#13151c; --code-text:#dcd8cf; --code-line:#2a2e3a;
+  --max:880px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Spectral",Georgia,serif; font-size:18px; line-height:1.72;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{background:var(--accent);color:#fff}
+
+/* ---------- layout ---------- */
+.shell{display:flex; align-items:flex-start}
+.sidebar{
+  position:sticky; top:0; height:100vh; width:320px; flex:0 0 320px;
+  background:var(--paper-2); border-right:1px solid var(--rule);
+  overflow-y:auto; padding:30px 20px 60px;
+}
+.sidebar::-webkit-scrollbar{width:9px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--rule);border-radius:6px}
+.brand{font-family:"Golos Text",sans-serif;font-weight:800;font-size:15px;letter-spacing:.02em;color:var(--ink);line-height:1.3}
+.brand small{display:block;font-weight:500;color:var(--muted);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-top:7px}
+.toc{margin-top:26px;font-family:"Golos Text",sans-serif}
+.toc a{display:block;text-decoration:none;color:var(--ink-soft);font-size:13.5px;line-height:1.35;padding:6px 10px;border-radius:6px;border-left:2px solid transparent;transition:.15s}
+.toc a .num{color:var(--faint);font-weight:600;font-variant-numeric:tabular-nums;margin-right:8px}
+.toc a:hover{background:#fff;color:var(--ink)}
+.toc a.active{background:var(--accent-soft);color:var(--accent-deep);border-left-color:var(--accent);font-weight:600}
+.toc a.active .num{color:var(--accent)}
+.toc .sub{padding-left:30px;font-size:12.5px;color:var(--muted)}
+.toc-group{margin-top:14px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:700;padding:0 10px}
+
+main{flex:1 1 auto; min-width:0; padding:0 64px 140px}
+.wrap{max-width:var(--max);margin:0 auto}
+
+/* ---------- cover ---------- */
+.cover{min-height:74vh;display:flex;flex-direction:column;justify-content:center;padding:60px 0;border-bottom:1px solid var(--rule)}
+.cover .kicker{font-family:"Golos Text",sans-serif;font-weight:700;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+.cover h1{font-family:"Golos Text",sans-serif;font-weight:900;font-size:clamp(38px,6vw,68px);line-height:1.02;letter-spacing:-.02em;margin:22px 0 0}
+.cover .lead{font-size:21px;color:var(--ink-soft);margin-top:26px;max-width:680px}
+.cover .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px;font-family:"Golos Text",sans-serif}
+.chip{font-size:12.5px;font-weight:600;letter-spacing:.02em;padding:7px 13px;border-radius:100px;background:#fff;border:1px solid var(--rule);color:var(--ink-soft)}
+.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.cover .status{margin-top:46px;font-family:"Golos Text",sans-serif;font-size:13px;color:var(--muted);border-top:1px dashed var(--rule);padding-top:18px}
+.cover .status b{color:var(--accent-deep)}
+
+/* ---------- typography ---------- */
+section.chapter{padding-top:54px}
+h2.sec{font-family:"Golos Text",sans-serif;font-weight:900;font-size:clamp(28px,4vw,40px);line-height:1.08;letter-spacing:-.02em;margin:0 0 4px;scroll-margin-top:20px}
+h2.sec .secnum{display:block;font-size:14px;letter-spacing:.2em;color:var(--accent);font-weight:700;margin-bottom:14px}
+.sec-rule{height:3px;width:64px;background:var(--accent);margin:18px 0 30px;border-radius:2px}
+h3{font-family:"Golos Text",sans-serif;font-weight:800;font-size:25px;line-height:1.2;letter-spacing:-.01em;margin:46px 0 12px;scroll-margin-top:20px}
+h4{font-family:"Golos Text",sans-serif;font-weight:700;font-size:19px;margin:32px 0 8px;color:var(--ink)}
+h5{font-family:"Golos Text",sans-serif;font-weight:700;font-size:15px;letter-spacing:.02em;margin:22px 0 6px;color:var(--ink-soft)}
+p{margin:14px 0}
+a.inline{color:var(--accent-deep);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+strong{font-weight:700;color:var(--ink)}
+em{font-style:italic}
+ul,ol{margin:14px 0;padding-left:26px}
+li{margin:7px 0}
+li::marker{color:var(--accent)}
+code:not(.hljs){font-family:"JetBrains Mono",monospace;font-size:.84em;background:var(--paper-2);border:1px solid var(--rule);padding:1px 6px;border-radius:5px;color:var(--accent-deep)}
+hr{border:none;border-top:1px solid var(--rule);margin:40px 0}
+.lead-p{font-size:20px;color:var(--ink-soft);line-height:1.6}
+
+/* ---------- code ---------- */
+.code{margin:22px 0;border-radius:11px;overflow:hidden;border:1px solid #0c0e14;box-shadow:0 14px 30px -18px rgba(0,0,0,.5)}
+.code-head{display:flex;align-items:center;gap:9px;background:var(--code-head);padding:10px 15px;border-bottom:1px solid #000}
+.code-head .dot{width:11px;height:11px;border-radius:50%}
+.code-head .r{background:#e06c5b}.code-head .y{background:#d9a04b}.code-head .g{background:#74a85f}
+.code-head .lang{margin-left:8px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#7b8190}
+.code-head .file{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:11.5px;color:#9aa0ad}
+pre{margin:0}
+pre code.hljs{display:block;background:var(--code-bg)!important;color:var(--code-text)!important;font-family:"JetBrains Mono",monospace;font-size:13.5px;line-height:1.62;padding:18px 20px;overflow-x:auto;tab-size:2}
+.hljs-comment,.hljs-quote{color:#6b7384;font-style:italic}
+.hljs-keyword,.hljs-selector-tag,.hljs-literal{color:#e08a5f}
+.hljs-string,.hljs-regexp,.hljs-addition{color:#9ac77e}
+.hljs-number,.hljs-built_in{color:#d6ad6b}
+.hljs-title,.hljs-title.function_,.hljs-section{color:#6cb0cb}
+.hljs-attr,.hljs-attribute,.hljs-variable,.hljs-template-variable{color:#c7a6da}
+.hljs-tag,.hljs-name{color:#e08a5f}
+.hljs-tag .hljs-attr{color:#d6ad6b}
+.hljs-meta,.hljs-symbol{color:#7b8190}
+.hljs-type,.hljs-class .hljs-title{color:#6cb0cb}
+.hljs-deletion{color:#e06c5b}
+
+/* ---------- diagrams ---------- */
+.diagram{background:#13151c;color:#cfe6e3;border-radius:11px;padding:24px 22px;margin:24px 0;font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.55;overflow-x:auto;border:1px solid #0c0e14;white-space:pre}
+.diagram .cap{display:block;color:#6b7384;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;white-space:normal}
+.diagram b{color:#7fd6cb;font-weight:700}
+.diagram .ar{color:#e08a5f}
+
+/* ---------- callouts ---------- */
+.box{margin:24px 0;border-radius:11px;padding:18px 20px 18px 22px;border:1px solid;position:relative;font-size:16.5px;line-height:1.62}
+.box .tag{display:inline-flex;align-items:center;gap:7px;font-family:"Golos Text",sans-serif;font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.box p:first-of-type{margin-top:0}.box p:last-child{margin-bottom:0}
+.box.best{background:var(--accent-soft);border-color:#bcdbd6;color:#143f3a}
+.box.best .tag{color:var(--accent-deep)}
+.box.warn{background:var(--rose-soft);border-color:#e7c3c3;color:#5e2025}
+.box.warn .tag{color:var(--rose)}
+.box.arch{background:var(--blue-soft);border-color:#c6d8e6;color:#1f4159}
+.box.arch .tag{color:var(--blue)}
+.box.perf{background:var(--amber-soft);border-color:#e8d2ad;color:#5e3c0a}
+.box.perf .tag{color:var(--amber)}
+.box.scale{background:var(--violet-soft);border-color:#d4cce8;color:#352a55}
+.box.scale .tag{color:var(--violet)}
+.box.ent{background:#eef0ec;border-color:#d3d8cd;color:#33382c}
+.box.ent .tag{color:#4a5340}
+
+/* ---------- tables ---------- */
+.tbl-wrap{margin:24px 0;overflow-x:auto;border:1px solid var(--rule);border-radius:11px}
+table{border-collapse:collapse;width:100%;font-size:15px;font-family:"Golos Text",sans-serif;background:var(--panel)}
+th{background:var(--paper-2);text-align:left;font-weight:700;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);padding:12px 15px;border-bottom:2px solid var(--rule)}
+td{padding:12px 15px;border-bottom:1px solid var(--rule-soft);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+td code{font-size:.82em}
+.t-good{color:var(--accent-deep);font-weight:700}
+.t-bad{color:var(--rose);font-weight:700}
+
+/* ---------- misc ---------- */
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0}
+.dual .code{margin:0}
+.label-bad,.label-good{font-family:"Golos Text",sans-serif;font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:7px}
+.label-bad{color:var(--rose)} .label-good{color:var(--accent-deep)}
+.menu-toggle{display:none}
+.progress{font-family:"Golos Text",sans-serif;font-size:12px;color:var(--muted);margin-top:10px}
+.progress .done{color:var(--accent-deep);font-weight:700}
+footer.doc{border-top:1px solid var(--rule);margin-top:80px;padding-top:30px;font-family:"Golos Text",sans-serif;font-size:13px;color:var(--muted)}
+
+@media(max-width:1080px){
+  main{padding:0 34px 120px}
+  .sidebar{position:fixed;left:0;top:0;z-index:40;transform:translateX(-100%);transition:.25s;box-shadow:0 0 50px rgba(0,0,0,.2)}
+  .sidebar.open{transform:translateX(0)}
+  .menu-toggle{display:flex;align-items:center;gap:8px;position:fixed;z-index:50;top:14px;left:14px;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:10px 14px;font-family:"Golos Text",sans-serif;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 6px 18px -6px rgba(0,0,0,.4)}
+  .dual{grid-template-columns:1fr}
+  body{font-size:17px}
+}
+@media print{
+  .sidebar,.menu-toggle{display:none}
+  main{padding:0}
+  .code,.diagram{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Содержание</button>
+<div class="shell">
+<aside class="sidebar">
+  <div class="brand">Enterprise Frontend Handbook<small>Vue 3 · JavaScript · Pinia</small></div>
+  <nav class="toc" id="toc">
+    <div class="toc-group">Основы</div>
+    <a href="#s1"><span class="num">01</span>Введение</a>
+    <a href="#s2"><span class="num">02</span>Архитектура Vue 3 приложения</a>
+    <a href="#s3"><span class="num">03</span>Composition API в больших проектах</a>
+    <div class="toc-group">Слои данных</div>
+    <a href="#s4"><span class="num">04</span>Repository Pattern</a>
+    <a href="#s5"><span class="num">05</span>Работа с CRUD</a>
+    <a href="#s6"><span class="num">06</span>Фильтры</a>
+    <a href="#s7"><span class="num">07</span>Payload Architecture</a>
+    <a href="#s8"><span class="num">08</span>State Management</a>
+    <div class="toc-group">UI и качество</div>
+    <a href="#s9"><span class="num">09</span>Работа с таблицами</a>
+    <a href="#s10"><span class="num">10</span>Производительность</a>
+    <a href="#s11"><span class="num">11</span>Anti-Patterns</a>
+    <a href="#s12"><span class="num">12</span>Заключение</a>
+  </nav>
+</aside>
+
+<main>
+<div class="wrap">
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="kicker">Internal Engineering Guide</div>
+  <h1>Архитектура Frontend на Vue 3 для enterprise CRUD-систем</h1>
+  <p class="lead">Практический handbook: как проектировать слои данных, фильтры, payload и состояние так, чтобы продукт оставался поддерживаемым через 2–5 лет развития.</p>
+  <div class="meta">
+    <span class="chip on">Vue 3</span>
+    <span class="chip on">Composition API</span>
+    <span class="chip on">JavaScript</span>
+    <span class="chip">Pinia</span>
+    <span class="chip">Vue Router</span>
+    <span class="chip">Axios</span>
+  </div>
+</div>
+
+<!-- ============ SECTION 1 ============ -->
+<section class="chapter" id="s1">
+  <h2 class="sec"><span class="secnum">Раздел 01</span>Введение</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">Любое enterprise CRUD-приложение проходит один и тот же путь. Сначала это десяток экранов, которые пишутся за неделю и «всё работает». Через год это сотни экранов, три поколения разработчиков, четыре способа сделать одно и то же, и страх трогать страницу со списком заказов, потому что «там фильтры завязаны на что-то». Архитектура — это набор решений, который определяет, насколько больно будет команде в этой второй фазе.</p>
+
+  <p>Важно сразу зафиксировать тезис, который проходит через весь документ: <strong>сложность enterprise-фронтенда почти никогда не в отдельной фиче. Она в связях между фичами и в жизненном цикле данных.</strong> Один экран с таблицей, фильтрами, пагинацией и формой редактирования — тривиален. Пятьдесят таких экранов, которые должны вести себя одинаково, переиспользовать логику фильтрации, синхронизироваться с URL, корректно отменять устаревшие запросы и собирать одинаковый по форме payload — это уже архитектурная задача. Различие между «работает» и «масштабируется» лежит именно здесь.</p>
+
+  <h3>Зачем вообще нужна архитектура</h3>
+
+  <p>Архитектура существует не ради красоты и не ради того, чтобы пройти код-ревью. У неё ровно три практические цели, и каждое архитектурное решение в этом документе оценивается через них:</p>
+
+  <ul>
+    <li><strong>Локализация изменений.</strong> Когда меняется один backend-эндпоинт, должно меняться одно место в коде, а не двенадцать. Хорошая архитектура отвечает на вопрос «где это лежит?» однозначно.</li>
+    <li><strong>Предсказуемость.</strong> Новый разработчик, открыв незнакомый экран, должен по структуре файлов понять, где находится бизнес-логика, где запрос к API, где состояние, где UI. Если каждый экран организован по-своему — это не архитектура, это набор индивидуальных решений.</li>
+    <li><strong>Ограничение радиуса поражения.</strong> Ошибка в одном слое не должна каскадом ломать остальные. Это достигается границами между слоями и контролем направления зависимостей.</li>
+  </ul>
+
+  <div class="box arch">
+    <span class="tag">◆ Architecture Note</span>
+    <p>Архитектуру удобно мерить не «красотой», а стоимостью изменения. Задайте по проекту три вопроса: <em>(1)</em> сколько файлов нужно тронуть, чтобы добавить новый фильтр на существующий список; <em>(2)</em> сколько — чтобы поменять формат даты во всех запросах; <em>(3)</em> сколько — чтобы добавить глобальную обработку 401. Если ответ на любой из них «много и в разных местах» — архитектуры по факту нет, есть привычки.</p>
+  </div>
+
+  <h3>Почему именно CRUD-приложения становятся сложными</h3>
+
+  <p>CRUD кажется простым: Create, Read, Update, Delete. Четыре операции, что тут сложного. Ловушка в том, что в enterprise каждая из этих букв обрастает контекстом, и сложность растёт не линейно, а по числу комбинаций.</p>
+
+  <p>Возьмём обычный список сущностей — скажем, заказы в admin-панели. «Read» здесь это не «получить список». Это: пагинация (offset или cursor), серверная сортировка по нескольким колонкам, десяток фильтров разных типов (multi-select, диапазон дат, поиск с debounce, булевы флаги), синхронизация всего этого с URL (чтобы ссылку можно было переслать коллеге), сохранение состояния при возврате со страницы детали, отмена устаревших запросов при быстром переключении фильтров, и обработка состояний loading / empty / error. Это всё ещё одна буква «R».</p>
+
+  <p>Теперь добавим, что таких списков в продукте пятьдесят, и бизнес требует, чтобы они вели себя одинаково. Вот тут проект и ломается — не на сложности одного экрана, а на требовании единообразия пятидесяти. Команда, у которой нет переиспользуемой архитектуры фильтров и списков, реализует эту логику пятьдесят раз, каждый раз чуть по-разному, и каждый баг приходится чинить в пятидесяти местах.</p>
+
+  <div class="diagram"><span class="cap">Как растёт реальная сложность одной «буквы R»</span>          READ (список заказов)
+            │
+   ┌────────┼─────────┬──────────┬───────────┐
+ пагинация  сортировка  фильтры   синхро URL   состояния
+   │          │          │          │          │
+ offset/    multi-    multi-select  query     loading
+ cursor     column    date-range    parse     empty
+            sort      search+       /serialize error
+                      debounce                 stale-cancel
+            <span class="ar">↓ × 50 списков в продукте, и всё должно вести себя одинаково ↓</span>
+       Сложность ≠ сумма экранов. Сложность = требование единообразия.</div>
+
+  <h3>Типичные проблемы enterprise-фронтенда</h3>
+
+  <p>Прежде чем строить «как надо», нужно честно назвать болезни, которые мы лечим. Ниже — не абстрактные страшилки, а конкретные паттерны деградации, которые повторяются из проекта в проект.</p>
+
+  <h4>Дублирование логики</h4>
+  <p>Самая частая и самая дорогая болезнь. Логика debounce поиска скопирована в восьми компонентах. Сборка query-параметров — в каждом списке своя. Преобразование даты в формат бэкенда — в каждой форме руками. Каждая копия со временем расходится: где-то поправили баг, где-то нет; где-то добавили новый параметр, где-то забыли. В результате одинаковые на вид экраны ведут себя по-разному, и никто уже не знает, какая версия «правильная».</p>
+
+  <h4>Огромные компоненты</h4>
+  <p>Компонент списка на 1200 строк, где в одном <code>&lt;script setup&gt;</code> лежит загрузка данных, состояние фильтров, сборка payload, логика пагинации, обработка ошибок, открытие модалок и форматирование для отображения. Такой компонент невозможно протестировать, невозможно переиспользовать и страшно менять, потому что любое изменение задевает всё сразу. Это прямое следствие отсутствия слоёв.</p>
+
+  <h4>Хаос в работе с API</h4>
+  <p><code>axios.get('/orders')</code> вызывается прямо из компонента. В двадцати компонентах. С разными базовыми URL, разной обработкой ошибок, разным форматом параметров. Когда бэкенд меняет контракт — начинается охота по всему проекту. Когда нужно добавить заголовок авторизации или обработку 401 — оказывается, что точки вызова разбросаны и единой точки нет.</p>
+
+  <h4>Сломанные и рассинхронизированные фильтры</h4>
+  <p>Фильтры — отдельный источник боли, которому посвящён целый раздел. Типичные симптомы: фильтр в UI показывает одно, а запрос уходит с другим; при перезагрузке страницы фильтры сбрасываются; быстрые клики по фильтрам приводят к тому, что в таблице оказывается результат не последнего, а предыдущего запроса (race condition); «сбросить фильтры» сбрасывает не всё.</p>
+
+  <h4>Проблемы payload</h4>
+  <p>На бэкенд уходит то, чего он не ждёт: пустые строки вместо <code>null</code>, <code>"true"</code> вместо <code>true</code>, дата в локальном формате вместо ISO, лишние UI-поля, которых нет в контракте. Или наоборот — теряются обязательные поля. Каждая форма собирает payload по-своему, и «payload drift» (расхождение формы payload между экранами) становится постоянным источником багов на интеграции.</p>
+
+  <h4>Race conditions</h4>
+  <p>Пользователь быстро меняет фильтр три раза. Уходит три запроса. Возвращаются они в произвольном порядке — сеть не гарантирует очередность. Если не отменять устаревшие запросы, в таблице окажется результат того, который вернулся последним, а не того, который соответствует текущему состоянию UI. Это один из самых коварных багов: воспроизводится через раз и «на моей машине не повторяется».</p>
+
+  <h4>Tight coupling между слоями</h4>
+  <p>Компонент знает структуру ответа бэкенда. Store знает про axios. Форма знает, в каком формате бэкенд хочет даты. Когда всё знает обо всём, изменение в одной точке требует изменений везде. Связанность (coupling) — это и есть та сила, которая превращает «поправить одно поле» в «переписать пол-проекта».</p>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern: «всё в компоненте»</span>
+    <p>Главный архитектурный анти-паттерн enterprise-фронтенда — компонент, который одновременно отвечает за отображение, за бизнес-логику, за сетевой запрос и за форму данных бэкенда. Он нарушает все три цели архитектуры сразу: изменение не локализуется, структура непредсказуема, радиус поражения максимальный. Почти все остальные проблемы — производные от этого.</p>
+  </div>
+
+  <h3>Как выглядит плохая архитектура</h3>
+
+  <p>Чтобы было предметно, вот компактный, но реалистичный пример того, как пишут списки, когда архитектуры нет. Этот код «работает» — и именно поэтому опасен.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">vue</span><span class="file">OrdersPage.vue — анти-пример</span></div>
+<pre><code class="language-xml">&lt;script setup&gt;
+import { ref, watch, onMounted } from 'vue'
+import axios from 'axios'
+
+const orders = ref([])
+const loading = ref(false)
+const search = ref('')
+const status = ref('')
+const dateFrom = ref('')
+const dateTo = ref('')
+const page = ref(1)
+const total = ref(0)
+
+let t = null
+// debounce прямо в компоненте, скопирован из соседнего экрана
+watch(search, () =&gt; {
+  clearTimeout(t)
+  t = setTimeout(load, 400)
+})
+watch([status, dateFrom, dateTo, page], load)
+
+async function load() {
+  loading.value = true
+  // прямой axios-вызов, ручная сборка query, никакой отмены запросов
+  const res = await axios.get('https://api.acme.io/v1/orders', {
+    params: {
+      q: search.value,
+      status: status.value,           // уйдёт '' вместо отсутствия параметра
+      date_from: dateFrom.value,      // локальный формат, не ISO
+      date_to: dateTo.value,
+      page: page.value,
+      per_page: 20,
+    },
+  })
+  // компонент знает форму ответа бэкенда — coupling
+  orders.value = res.data.data.items
+  total.value = res.data.data.meta.total
+  loading.value = false   // при ошибке навсегда останется true
+}
+
+onMounted(load)
+&lt;/script&gt;</code></pre>
+  </div>
+
+  <p>Разберём, почему этот безобидный на вид код — мина замедленного действия. Каждый пункт ниже превратится в баг или в боль поддержки в течение полугода:</p>
+
+  <ul>
+    <li><strong>Прямой <code>axios</code> в компоненте.</strong> Базовый URL захардкожен. Нет единой обработки ошибок, нет обработки 401, нет места, куда добавить заголовки. В соседних двадцати экранах — то же самое, но чуть иначе.</li>
+    <li><strong>Ручная сборка query.</strong> Пустые строки уйдут на бэкенд как реальные значения фильтра (<code>status=''</code>), хотя смысл был «фильтр не выбран». Даты в локальном формате. Эта логика не переиспользуется и в каждом списке слегка отличается.</li>
+    <li><strong>Нет отмены устаревших запросов.</strong> Быстрое переключение фильтров — гарантированный race condition.</li>
+    <li><strong>Компонент знает структуру ответа</strong> (<code>res.data.data.items</code>). Бэкенд поменяет обёртку — придётся править все списки.</li>
+    <li><strong><code>loading=false</code> только в happy path.</strong> Любая ошибка сети — и спиннер крутится вечно. Состояние error не обрабатывается вообще.</li>
+    <li><strong>debounce руками.</strong> Скопирован, живёт своей жизнью, при размонтировании таймер не очищается — потенциальная утечка и обновление состояния после unmount.</li>
+  </ul>
+
+  <p>Ни одна из этих проблем не критична поодиночке. Проблема в том, что этот паттерн тиражируется. Пятьдесят таких компонентов — это пятьдесят мест, где живёт один и тот же баг, и пятьдесят разных его мутаций.</p>
+
+  <h3>Признаки плохого проекта</h3>
+
+  <p>Диагностику удобно вести по симптомам. Если вы узнаёте свой проект в трёх и более пунктах — техдолг уже управляет вами, а не вы им.</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Симптом</th><th>Что он означает на самом деле</th></tr></thead>
+    <tbody>
+      <tr><td>«Боюсь трогать этот экран»</td><td>Нет границ между слоями; радиус поражения изменения непредсказуем</td></tr>
+      <tr><td>Поиск по проекту даёт 12 копий одной функции</td><td>Нет переиспользуемого слоя; логика дублируется</td></tr>
+      <tr><td>Одинаковые экраны ведут себя по-разному</td><td>Копии разошлись; единого источника правды нет</td></tr>
+      <tr><td>Новый разработчик неделю «вникает» в один экран</td><td>Структура непредсказуема, нет конвенций</td></tr>
+      <tr><td>Изменение формата даты → правки в 30 файлах</td><td>Нет централизованной сериализации payload</td></tr>
+      <tr><td>Баги «через раз», «не повторяется»</td><td>Race conditions, неотменяемые запросы</td></tr>
+      <tr><td>Компоненты по 800–1500 строк</td><td>Нет декомпозиции, бизнес-логика смешана с UI</td></tr>
+      <tr><td>Бэкенд меняет один эндпоинт → фронт чинится днями</td><td>Tight coupling, компоненты знают форму ответа</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Признаки хорошего enterprise-фронтенда</h3>
+
+  <p>Зеркальная картина. Это не «идеал из книжки», а набор свойств, которые реально снижают стоимость владения кодом:</p>
+
+  <ul>
+    <li><strong>Однозначность размещения.</strong> На вопрос «куда положить этот код» есть один правильный ответ, и он следует из роли кода, а не из вкуса автора.</li>
+    <li><strong>Слой данных изолирован.</strong> Компоненты не знают про axios и про форму ответа бэкенда. Между ними — repository/service слой, который можно поменять, не трогая UI.</li>
+    <li><strong>Переиспользуемые примитивы.</strong> Фильтры, пагинация, debounce, сборка payload, состояние таблицы — это composables и утилиты, написанные один раз. Новый список собирается из готовых блоков за час, а не за неделю.</li>
+    <li><strong>Единая точка для сквозных задач.</strong> Авторизация, обработка ошибок, refresh токена, формат дат — настраиваются в одном месте.</li>
+    <li><strong>Предсказуемое поведение под нагрузкой.</strong> Устаревшие запросы отменяются, состояния loading/empty/error обрабатываются всегда, фильтры синхронизируются с URL по умолчанию.</li>
+    <li><strong>Дешёвое изменение.</strong> Добавить фильтр — изменить один объект конфигурации. Поменять контракт API — поправить один адаптер.</li>
+  </ul>
+
+  <div class="box best">
+    <span class="tag">✦ Best Practice</span>
+    <p>Главный критерий зрелости архитектуры — <strong>«добавить новое дёшево, изменить старое дёшево»</strong>. Если добавление 51-го списка требует столько же усилий, сколько первого, архитектуры нет. Если столько же, сколько копипасты одного файла — есть, но плохая. Цель — чтобы 51-й список собирался из переиспользуемых блоков за обозримое время и вёл себя идентично остальным пятидесяти автоматически.</p>
+  </div>
+
+  <h3>Как мы будем строить</h3>
+
+  <p>Весь дальнейший документ — это последовательное построение такой архитектуры. Мы пойдём от структуры проекта (Раздел 2) и принципов Composition API (Раздел 3) к слою данных (Repository, Раздел 4), затем разберём CRUD (Раздел 5), глубоко проработаем фильтры (Раздел 6) и сборку payload (Раздел 7), управление состоянием (Раздел 8), таблицы (Раздел 9), производительность (Раздел 10) и каталог анти-паттернов (Раздел 11).</p>
+
+  <p>Сквозная линия всего handbook — <strong>полный жизненный цикл данных</strong>: от действия пользователя в UI, через composable и store, через repository и service, через сборку payload и сериализацию query, до HTTP-клиента и бэкенда — и обратно: ответ, его трансформация, нормализация, попадание в состояние и рендер. Эту цепочку мы будем возвращать снова и снова, потому что именно понимание её целиком отличает хорошего инженера от разработчика, который «умеет писать компоненты».</p>
+
+  <div class="diagram"><span class="cap">Сквозная линия документа — жизненный цикл данных (на неё мы будем ссылаться постоянно)</span>  <b>UI Component</b>  <span class="ar">─▶</span>  <b>Composable</b>  <span class="ar">─▶</span>  <b>Pinia Store</b>  <span class="ar">─▶</span>  <b>Repository</b>
+       ▲                                                          │
+       │                                                          ▼
+   рендер,                                                    <b>Service</b> (payload/query builders, serializers)
+   состояния                                                      │
+   loading/empty/error                                            ▼
+       │                                                     <b>HTTP Client</b> (axios + interceptors)
+       │                                                          │
+       └──────── normalize / map DTO ◀──── response ◀─────── <b>Backend API</b></div>
+</section>
+
+<!-- ============ SECTION 2 ============ -->
+<section class="chapter" id="s2">
+  <h2 class="sec"><span class="secnum">Раздел 02</span>Архитектура Vue 3 приложения</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">Структура папок — это не вкусовщина. Это материализованные правила: что от чего зависит, где живёт бизнес-логика, куда нельзя класть UI. Хорошая структура делает правильное решение очевидным, а неправильное — неудобным. Мы строим её на классическом enterprise-подходе с разделением по техническим слоям, сознательно отказываясь от Feature-Sliced Design.</p>
+
+  <div class="box arch">
+    <span class="tag">◆ Architecture Note — почему не FSD</span>
+    <p>Feature-Sliced Design — хорошая методология, но в этом документе мы её не используем намеренно. Причины прагматичные: для команд уровня Middle классическая слоистая структура (api / repository / store / services / composables / components) имеет более пологую кривую входа, не требует дисциплины импортов между слайсами и точно ложится на CRUD-домен, где главная ось сложности — это <em>слои данных</em>, а не <em>вертикальные фичи</em>. FSD силён, когда продукт растёт фичами с изолированными командами; классическая структура силён, когда продукт растёт <em>однотипными CRUD-экранами</em>, переиспользующими общий data-layer. У нас второй случай.</p>
+  </div>
+
+  <h3>Базовая структура проекта</h3>
+
+  <p>Вот опорная структура, которую мы будем наполнять весь документ. Каждая папка соответствует одному уровню ответственности, и между ними есть строгое направление зависимостей (об этом — ниже).</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span><span class="file">src/ — целевая структура</span></div>
+<pre><code class="language-bash">src/
+├── api/            # тонкий слой HTTP: axios-инстанс, interceptors, endpoints
+├── repository/     # доступ к данным по доменам: CRUD-методы, маппинг DTO
+├── services/       # переиспользуемая «механика»: payload/query builders, serializers
+├── store/          # Pinia: доменные / entity / UI сторы
+├── composables/    # переиспользуемая бизнес-логика для компонентов (use*)
+├── router/         # маршруты, guards, meta
+├── pages/          # экраны-контейнеры, привязанные к маршрутам
+├── components/     # презентационные и составные UI-компоненты
+├── layouts/        # каркасы страниц (app shell, auth layout)
+├── constants/      # перечисления, ключи, неизменяемые конфиги
+├── helpers/        # чистые функции-помощники предметной области
+├── utils/          # чистые технические утилиты общего назначения
+└── plugins/        # инициализация сторонних библиотек, глобальная настройка</code></pre>
+  </div>
+
+  <p>Ключевая идея, которую нужно держать в голове при чтении всех описаний ниже: <strong>папка — это контракт об ответственности</strong>. «Что это за код?» отвечается до «как он написан». Если код можно положить в две папки — значит, он делает две вещи и должен быть разбит.</p>
+
+  <h3>Назначение каждой папки</h3>
+
+  <h4>api/ — транспортный слой</h4>
+  <p><strong>Назначение.</strong> Единственное место, где живёт знание о том, <em>как</em> мы ходим в сеть. Конфигурация axios, базовый URL, interceptors (авторизация, обработка ошибок, refresh токена), низкоуровневые описания эндпоинтов.</p>
+  <p><strong>Что хранится:</strong> инстанс <code>httpClient</code>, перехватчики, утилиты транспорта (например, фабрика <code>CancelToken</code>/<code>AbortController</code>), константы базовых путей.</p>
+  <p><strong>Что нельзя хранить:</strong> бизнес-логику, знание о доменных сущностях, маппинг DTO. <code>api/</code> не знает, что такое «Заказ» — он знает только, что такое «GET-запрос с заголовками».</p>
+  <p><strong>Типичная ошибка:</strong> превращать <code>api/</code> в свалку функций вида <code>getOrdersWithFiltersAndMapping()</code>. Маппинг и доменное знание — это уже <code>repository/</code>.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/api/httpClient.js</span></div>
+<pre><code class="language-javascript">import axios from 'axios'
+
+// Единственный экземпляр на всё приложение. Базовый URL — из env, не из кода.
+export const httpClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  timeout: 30_000,
+  headers: { 'Content-Type': 'application/json' },
+})
+
+// Транспорт ничего не знает о доменах. Он знает только про HTTP.
+// Авторизация, ошибки, refresh — отдельными interceptors (см. Раздел 4).</code></pre>
+  </div>
+
+  <h4>repository/ — слой доступа к данным по доменам</h4>
+  <p><strong>Назначение.</strong> Здесь язык приложения встречается с языком API. Repository знает домен («Заказ», «Пользователь») и предоставляет осмысленные методы: <code>fetchList</code>, <code>fetchById</code>, <code>create</code>, <code>update</code>, <code>remove</code>. Он же отвечает за преобразование ответа бэкенда в форму, удобную приложению (маппинг DTO → доменная модель).</p>
+  <p><strong>Что хранится:</strong> по одному модулю на домен (<code>orders.repository.js</code>), CRUD-методы, маппинг ответа, передача query/payload, формируемых сервисами.</p>
+  <p><strong>Что нельзя хранить:</strong> реактивное состояние (это <code>store/</code>), UI-логику, axios-конфигурацию (это <code>api/</code>).</p>
+  <p><strong>Типичная ошибка:</strong> протаскивать «сырой» ответ бэкенда выше по стеку. Если <code>res.data.data.items</code> доходит до компонента — repository не выполнил свою работу. Граница маппинга проходит здесь.</p>
+
+  <h4>services/ — переиспользуемая механика</h4>
+  <p><strong>Назначение.</strong> Чистая, тестируемая «механика» обработки данных, не привязанная к конкретному домену и к Vue: построители query-параметров, построители payload, сериализаторы фильтров, нормализаторы (даты, булевы, пустые значения). Именно сюда мы вынесем то, что в анти-примере было размазано по компонентам.</p>
+  <p><strong>Что хранится:</strong> <code>queryBuilder</code>, <code>payloadBuilder</code>, <code>filterSerializer</code>, нормализаторы. Всё это — чистые функции без побочных эффектов.</p>
+  <p><strong>Что нельзя хранить:</strong> сетевые вызовы (это <code>api/</code>/<code>repository/</code>), реактивность, доменные CRUD-методы.</p>
+  <p><strong>Граница со <code>helpers/</code>:</strong> <code>services/</code> — это связные модули вокруг конкретной задачи (сборка payload). <code>helpers/</code> — отдельные доменные функции. <code>utils/</code> — технические примитивы вне домена.</p>
+
+  <h4>store/ — состояние (Pinia)</h4>
+  <p><strong>Назначение.</strong> Реактивное состояние, которое должно жить дольше отдельного компонента или быть общим для нескольких. Не «всё подряд», а только то, что действительно требует общего источника правды.</p>
+  <p><strong>Что хранится:</strong> доменные сторы (данные сущностей, кэш), entity-сторы (нормализованные коллекции), UI-сторы (глобальные модалки, тосты, тема).</p>
+  <p><strong>Что нельзя хранить:</strong> то, что нужно одному компоненту и умирает вместе с ним (это локальный <code>ref</code> или composable). Прямые вызовы axios. Раздувание стора до «god store», знающего про всё (см. Раздел 8).</p>
+
+  <h4>composables/ — переиспользуемая логика компонентов</h4>
+  <p><strong>Назначение.</strong> Связующее звено между состоянием/данными и компонентами. Здесь живут <code>useFilters</code>, <code>usePagination</code>, <code>useCrud</code>, <code>useTableState</code>, <code>useDebounce</code> — переиспользуемые куски поведения, которые компонент «подключает».</p>
+  <p><strong>Что хранится:</strong> функции <code>useXxx</code>, возвращающие реактивное состояние и методы.</p>
+  <p><strong>Что нельзя хранить:</strong> разметку, глобальное состояние (это store), прямые сетевые вызовы в обход repository.</p>
+  <p><strong>Типичная ошибка:</strong> «god-composable» на 500 строк, делающий всё сразу. Composable должен отвечать за одну ось поведения (см. Раздел 3).</p>
+
+  <h4>pages/ vs components/ — критичная граница</h4>
+  <p>Это разделение спасает проект от «компонентов-помоек». <strong>pages/</strong> — это контейнеры, привязанные к маршруту. Их работа — оркестрация: подключить нужные composables, связать данные с презентационными компонентами, реагировать на события. Страница знает «что показать», но не «как нарисовать».</p>
+  <p><strong>components/</strong> — это переиспользуемые блоки UI. Хорошие компоненты максимально «глупые»: получают данные через props, сообщают о действиях через emit, не ходят в сеть и не знают про store. Чем глупее компонент, тем шире его переиспользование.</p>
+
+  <div class="box best">
+    <span class="tag">✦ Best Practice — правило «контейнер / презентация»</span>
+    <p>Страница (<code>pages/</code>) <em>оркестрирует</em>: держит composables, решает что грузить, ловит события. Компонент (<code>components/</code>) <em>отображает</em>: props внутрь, emit наружу, ноль знаний об источнике данных. Если презентационный компонент импортирует store или repository — граница нарушена, и переиспользовать его уже нельзя.</p>
+  </div>
+
+  <h4>router/, layouts/, constants/, helpers/, utils/, plugins/</h4>
+  <ul>
+    <li><strong>router/</strong> — определения маршрутов, навигационные guards (auth, роли), <code>meta</code>. Логику авторизации <em>проверяем</em> здесь, но <em>храним</em> правила в сервисах/сторе.</li>
+    <li><strong>layouts/</strong> — каркасы (app shell с сайдбаром, auth-layout без него). Layout — это «рамка», в которую router монтирует страницы.</li>
+    <li><strong>constants/</strong> — неизменяемые значения: статусы заказов, ключи query-параметров, перечисления. Один источник правды для «магических строк».</li>
+    <li><strong>helpers/</strong> — чистые функции предметной области (форматирование суммы заказа, расчёт статуса). Знают про домен, но без состояния и сети.</li>
+    <li><strong>utils/</strong> — технические примитивы вне домена (<code>debounce</code>, <code>deepClone</code>, работа с датами). Не знают ничего про бизнес.</li>
+    <li><strong>plugins/</strong> — инициализация сторонних библиотек и глобальная настройка приложения при старте.</li>
+  </ul>
+
+  <div class="box arch">
+    <span class="tag">◆ Architecture Note — helpers vs utils vs services</span>
+    <p>Эти три папки путают чаще всего. Простое правило: <strong>utils</strong> — «не знает про наш бизнес вообще» (мог бы жить в любом проекте); <strong>helpers</strong> — «знает про наш домен, но это одиночные функции»; <strong>services</strong> — «связные модули вокруг технической задачи слоя данных» (сборка payload, query). Если функция работает с датами вообще — <code>utils</code>. Если форматирует статус именно нашего заказа — <code>helpers</code>. Если строит query для нашего API из объекта фильтров — <code>services</code>.</p>
+  </div>
+
+  <h3>Направление зависимостей</h3>
+
+  <p>Папки — это половина дела. Вторая половина — <strong>правило, кто кого может импортировать</strong>. Без него структура превращается в декорацию: файлы лежат по папкам, но импортируют друг друга как попало, и связанность возвращается.</p>
+
+  <p>Зависимости текут в одну сторону — сверху вниз. Верхние слои (UI) знают о нижних (данные), но нижние никогда не знают о верхних. <code>repository</code> не импортирует компонент. <code>service</code> не импортирует store. Это и есть граница, ограничивающая радиус поражения.</p>
+
+  <div class="diagram"><span class="cap">Dependency flow — зависимости только вниз, никогда вверх</span>  <b>pages/</b>            (оркестрация маршрута)
+     │  импортирует
+     ▼
+  <b>components/</b>  ◀── props/emit ──  (презентация, без знаний о данных)
+     │
+     ▼
+  <b>composables/</b>        (use*: переиспользуемая логика компонентов)
+     │
+     ▼
+  <b>store/</b>              (Pinia: реактивное состояние домена/UI)
+     │
+     ▼
+  <b>repository/</b>         (CRUD по доменам + маппинг DTO)
+     │
+     ├──▶ <b>services/</b>   (query/payload builders, serializers — чистые)
+     │
+     ▼
+  <b>api/</b>                (axios + interceptors — транспорт)
+
+  <span class="ar">Поперёк всех слоёв:</span> utils/ · helpers/ · constants/  (чистое, без состояния)
+  <span class="ar">✗ Запрещено:</span> repository → component · service → store · api → repository</div>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern — циклические и восходящие зависимости</span>
+    <p>Как только нижний слой импортирует верхний (repository тянет composable, service тянет store), появляется цикл и слои «слипаются». Симптом — невозможность вынести модуль в отдельный пакет или протестировать его изолированно: чтобы импортировать repository в тесте, приходится поднимать половину приложения. Лечится строгим однонаправленным потоком и передачей зависимостей <em>внутрь</em> (аргументами), а не импортом <em>наверх</em>.</p>
+  </div>
+
+  <h3>Naming conventions</h3>
+
+  <p>Имена — это дешёвая навигация. Когда по имени файла понятно, что внутри и в каком слое оно живёт, проект «читается». Конвенции должны быть скучными и единообразными — оригинальность здесь вредна.</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Слой</th><th>Файл</th><th>Экспорт</th><th>Пример</th></tr></thead>
+    <tbody>
+      <tr><td>composables</td><td><code>camelCase</code> с <code>use</code></td><td>функция <code>useXxx</code></td><td><code>useOrdersFilters.js</code> → <code>useOrdersFilters()</code></td></tr>
+      <tr><td>store</td><td><code>xxx.store.js</code></td><td><code>useXxxStore</code></td><td><code>orders.store.js</code> → <code>useOrdersStore()</code></td></tr>
+      <tr><td>repository</td><td><code>xxx.repository.js</code></td><td>объект/функции</td><td><code>orders.repository.js</code> → <code>ordersRepository</code></td></tr>
+      <tr><td>service</td><td><code>xxx.service.js</code></td><td>чистые функции</td><td><code>queryBuilder.service.js</code></td></tr>
+      <tr><td>components</td><td><code>PascalCase.vue</code></td><td>SFC</td><td><code>OrdersTable.vue</code>, <code>BaseModal.vue</code></td></tr>
+      <tr><td>pages</td><td><code>PascalCasePage.vue</code></td><td>SFC</td><td><code>OrdersListPage.vue</code></td></tr>
+      <tr><td>constants</td><td><code>xxx.constants.js</code></td><td><code>UPPER_SNAKE</code></td><td><code>ORDER_STATUS</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box best">
+    <span class="tag">✦ Best Practice — префиксы как навигация</span>
+    <p>Префикс <code>Base*</code> для примитивных переиспользуемых компонентов (<code>BaseButton</code>, <code>BaseModal</code>, <code>BaseTable</code>) и доменный префикс для составных (<code>Orders*</code>, <code>Users*</code>) дают мгновенную навигацию: <code>Base*</code> можно использовать где угодно, <code>Orders*</code> привязан к домену. Один взгляд на имя — и понятно, можно ли переиспользовать компонент в другом домене.</p>
+  </div>
+
+  <h3>Правила импортов и декомпозиции</h3>
+
+  <p>Сформулируем явные правила, которые легко проверять на ревью и которые можно даже автоматизировать линтером (<code>eslint-plugin-import</code>, <code>no-restricted-imports</code>):</p>
+
+  <ol>
+    <li><strong>Только вниз.</strong> Слой импортирует строго нижележащие слои. Восходящий импорт — ошибка ревью.</li>
+    <li><strong>Презентация не ходит за данными.</strong> Компонент из <code>components/</code> не импортирует <code>store/</code>, <code>repository/</code> или <code>api/</code>. Данные приходят через props.</li>
+    <li><strong>Компонент в сеть не ходит.</strong> Сетевой вызов только через repository, вызванный из store/composable, а не из <code>&lt;script setup&gt;</code> напрямую.</li>
+    <li><strong>Абсолютные импорты через alias.</strong> <code>@/repository/orders.repository</code> вместо <code>../../../repository/...</code>. Перенос файла не должен ломать пол-проекта.</li>
+    <li><strong>Один модуль — одна ответственность.</strong> Если файл хочется назвать через «and» (<code>fetchAndMapAndCache</code>), он делает слишком много.</li>
+  </ol>
+
+  <h3>UI vs business logic</h3>
+
+  <p>Главное разделение, ради которого вообще существует слоистая структура. Бизнес-логика (когда грузить, как собрать payload, что считать валидным, как обработать ошибку) не должна жить в шаблоне или в обработчике клика. Шаблон — это проекция состояния. Обработчик — это вызов уже готового метода.</p>
+
+  <p>Сравним. Слева — как делать <em>не</em> надо: логика в компоненте. Справа — как надо: компонент тонкий, логика в composable.</p>
+
+  <div class="dual">
+    <div>
+      <div class="label-bad">✗ Логика в компоненте</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">vue</span></div>
+<pre><code class="language-xml">&lt;script setup&gt;
+import { ref } from 'vue'
+import axios from 'axios'
+
+const users = ref([])
+const loading = ref(false)
+
+async function load() {
+  loading.value = true
+  const r = await axios
+    .get('/api/users')
+  users.value = r.data.data
+    .filter(u =&gt; u.active)
+    .map(u =&gt; ({
+      ...u,
+      name: u.first + ' ' + u.last,
+    }))
+  loading.value = false
+}
+&lt;/script&gt;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="label-good">✓ Логика в composable</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">vue</span></div>
+<pre><code class="language-xml">&lt;script setup&gt;
+import { useUsers } from '@/composables/useUsers'
+
+// компонент только подключает поведение
+const { users, loading, load } = useUsers()
+load()
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;UsersTable
+    :rows="users"
+    :loading="loading"
+  /&gt;
+&lt;/template&gt;</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <p>Во втором варианте <code>useUsers</code> внутри обращается к repository (который знает про API и маппинг), фильтрация активных и склейка имени — это либо часть маппинга в repository, либо helper. Компонент не знает ни про axios, ни про форму ответа, ни про правила фильтрации. Его можно переиспользовать, замокать и протестировать.</p>
+
+  <h3>Плохая структура → хорошая структура: эволюция</h3>
+
+  <p>Чтобы показать ценность правил предметно, проследим, как один и тот же функционал «список заказов с фильтрами» выглядит на трёх стадиях зрелости проекта.</p>
+
+  <h4>Стадия 1 — «всё в компоненте» (так начинается каждый проект)</h4>
+  <div class="diagram"><span class="cap">Стадия 1 — нет слоёв, логика и сеть внутри экрана</span>OrdersPage.vue
+   ├─ axios.get(...)          ← сеть прямо здесь
+   ├─ ручная сборка query     ← дублируется в каждом списке
+   ├─ debounce руками         ← скопирован
+   ├─ знание формы ответа     ← coupling с бэкендом
+   └─ разметка таблицы
+
+UsersPage.vue   → то же самое, но чуть иначе
+ProductsPage.vue → то же самое, но ещё иначе
+   <span class="ar">Итог: 50 экранов = 50 копий одной логики, все разошлись</span></div>
+
+  <h4>Стадия 2 — слои выделены, но слабая переиспользуемость</h4>
+  <div class="diagram"><span class="cap">Стадия 2 — слои есть, но логика списка ещё дублируется</span>OrdersPage.vue
+   └─ useOrdersList()          ← логика вынесена из компонента ✓
+        └─ ordersRepository    ← сеть изолирована ✓
+             └─ httpClient
+UsersPage.vue
+   └─ useUsersList()           ← но это почти копия useOrdersList ✗
+ProductsPage.vue
+   └─ useProductsList()        ← и это тоже ✗
+   <span class="ar">Лучше: сеть и форма ответа изолированы. Хуже: логика списка всё ещё ×N</span></div>
+
+  <h4>Стадия 3 — переиспользуемые примитивы (цель)</h4>
+  <div class="diagram"><span class="cap">Стадия 3 — общая механика списка, домен только конфигурирует</span>OrdersPage.vue ─┐
+UsersPage.vue  ─┼─▶ useCrudList({ repository, filtersSchema })
+ProductsPage.vue┘        │   ← одна реализация на все списки
+                        ├─▶ useFilters     (Раздел 6)
+                        ├─▶ usePagination
+                        └─▶ ordersRepository / usersRepository / ...
+                                 └─▶ services: queryBuilder, payloadBuilder (Разделы 6–7)
+                                        └─▶ httpClient + interceptors (Раздел 4)
+   <span class="ar">Итог: новый список = конфиг + repository. Поведение единообразно автоматически.</span></div>
+
+  <div class="box scale">
+    <span class="tag">▣ Scaling Note</span>
+    <p>Стадии нельзя перепрыгнуть искусственно. Преждевременная абстракция (сразу писать <code>useCrudList</code> до того, как появилось 3–4 реальных списка) так же вредна, как и её отсутствие: вы зафиксируете неверные допущения. Практическое правило — <strong>«правило трёх»</strong>: первые два-три экрана пишем по Стадии 2, осознанно дублируя; на третьем-четвёртом видим реальные различия и выносим <em>проверенную практикой</em> абстракцию. Абстракция, выведенная из трёх реальных примеров, почти всегда верна; выведенная из нуля — почти всегда нет.</p>
+  </div>
+
+  <h3>Слишком связанная архитектура — как распознать</h3>
+
+  <p>Даже при правильных папках можно построить жёстко связанную систему. Признаки tight coupling, которые надо ловить на ревью:</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Признак связанности</th><th>Почему плохо</th><th>Как развязать</th></tr></thead>
+    <tbody>
+      <tr><td>Компонент знает <code>res.data.data.items</code></td><td>смена обёртки API ломает UI</td><td>маппинг в repository</td></tr>
+      <tr><td>Store импортирует <code>axios</code></td><td>store нельзя тестировать без сети</td><td>store зовёт repository</td></tr>
+      <tr><td>Форма знает формат дат бэкенда</td><td>смена формата → правки везде</td><td>сериализация в payloadBuilder</td></tr>
+      <tr><td>Презентационный компонент тянет store</td><td>нельзя переиспользовать</td><td>данные через props</td></tr>
+      <tr><td>Repository знает про роутер/URL</td><td>смешение слоёв, цикл</td><td>URL-синхронизация — в composable</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box ent">
+    <span class="tag">■ Enterprise Recommendation</span>
+    <p>Зафиксируйте правила слоёв и импортов письменно — в <code>ARCHITECTURE.md</code> и в конфиге линтера (<code>no-restricted-imports</code> по путям). Конвенция, не закреплённая инструментом, деградирует за один-два спринта под давлением сроков: кто-то «временно» вызовет axios из компонента, ревьюер пропустит, и через месяц так делают все. Линтер, падающий на восходящем импорте, — это дешёвый и неутомимый архитектор, который не устаёт и не идёт на компромисс под дедлайн.</p>
+  </div>
+
+  <div class="box perf">
+    <span class="tag">◈ Performance Note</span>
+    <p>Структура влияет и на производительность сборки. Чёткие слои позволяют резать бандл по маршрутам (<code>pages/</code> грузятся лениво через динамический импорт в роутере), а тяжёлые зависимости (графики, редакторы) изолировать в компонентах, которые подключаются через <code>defineAsyncComponent</code>. Когда сеть и тяжёлый UI размазаны по «компонентам-помойкам», ленивая загрузка невозможна в принципе — всё связано со всем и тянется в начальный чанк. Подробно — в Разделе 10.</p>
+  </div>
+
+  <p>На этом фундамент заложен: мы знаем, какие проблемы решаем (Раздел 1) и куда какой код класть (Раздел 2). Дальше — как наполнять эти слои. Следующий раздел разбирает Composition API как основной инструмент переиспользования бизнес-логики и закладывает <code>composables</code>, на которые будут опираться CRUD, фильтры и таблицы.</p>
+</section>
+
+<!-- ============ SECTION 3 ============ -->
+<section class="chapter" id="s3">
+  <h2 class="sec"><span class="secnum">Раздел 03</span>Composition API в больших проектах</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">Composition API — это не «новый способ писать компоненты». Это механизм, который позволяет вынести поведение из компонента и переиспользовать его как функцию. Именно эта возможность превращает разрозненные экраны в систему: один раз написанный <code>usePagination</code> работает одинаково в пятидесяти списках. В этом разделе мы закладываем фундамент <code>composables/</code>, на который дальше опираются CRUD (Раздел 5), фильтры (Раздел 6) и таблицы (Раздел 9).</p>
+
+  <h3>Почему Composition API, а не Options API и не mixins</h3>
+
+  <p>В Vue 2 переиспользование логики между компонентами решалось через mixins. Это работало для двух-трёх компонентов и катастрофически деградировало в больших проектах. Composition API решает ровно те проблемы, на которых ломались mixins.</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Проблема</th><th>Mixins (Vue 2)</th><th>Composables (Vue 3)</th></tr></thead>
+    <tbody>
+      <tr><td>Откуда взялось свойство</td><td><span class="t-bad">неявно</span> — «прилетает» из миксина, источник не виден в компоненте</td><td><span class="t-good">явно</span> — <code>const { page } = usePagination()</code>, видно происхождение</td></tr>
+      <tr><td>Коллизии имён</td><td><span class="t-bad">молчаливые</span> — два миксина с <code>loading</code> затирают друг друга</td><td><span class="t-good">невозможны</span> — вы сами называете переменные при деструктуризации</td></tr>
+      <tr><td>Композиция нескольких</td><td><span class="t-bad">плоская</span> — всё сваливается в один namespace компонента</td><td><span class="t-good">вложенная</span> — composable вызывает другой composable</td></tr>
+      <tr><td>Передача параметров</td><td><span class="t-bad">никак</span> — миксин нельзя сконфигурировать аргументом</td><td><span class="t-good">аргументы функции</span> — <code>usePagination({ perPage: 50 })</code></td></tr>
+      <tr><td>Тестируемость</td><td><span class="t-bad">только через компонент</span></td><td><span class="t-good">как обычная функция</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Ключевое слово — <strong>явность</strong>. В enterprise-проекте, где код читают чаще, чем пишут, неявность mixins становится налогом на каждое чтение. Composable возвращает то, что вы у него попросили, и вы видите это прямо в месте использования. Это снижает когнитивную нагрузку при работе с незнакомым экраном — а это и есть «предсказуемость» из целей Раздела 1.</p>
+
+  <h3>Как проектировать composable: контракт</h3>
+
+  <p>Composable — это функция с чётким контрактом: какие у неё <em>входы</em> (аргументы), какое <em>состояние</em> она держит, какие <em>методы</em> отдаёт наружу. Проектирование composable начинается не с кода, а с ответа на вопрос: «за какую одну ось поведения он отвечает?».</p>
+
+  <ul>
+    <li><strong>Одна ответственность.</strong> <code>usePagination</code> отвечает за страницы и только за них. Не за загрузку данных, не за фильтры. Загрузка — это <code>useCrudList</code>, который <em>использует</em> пагинацию.</li>
+    <li><strong>Возвращать <code>ref</code>/<code>computed</code>, не реактивный объект.</strong> Возврат refs позволяет деструктурировать результат без потери реактивности. Возврат <code>reactive({})</code> при деструктуризации реактивность теряет — это классическая ошибка.</li>
+    <li><strong>Чистить за собой.</strong> Таймеры, подписки, слушатели событий должны сниматься при разрушении scope через <code>onScopeDispose</code> — иначе утечки и обновление состояния после unmount.</li>
+    <li><strong>Не лезть в глобальное состояние без необходимости.</strong> Composable по умолчанию создаёт <em>локальное</em> состояние на каждый вызов. Если нужно общее — это уже store (Раздел 8), и это осознанное решение.</li>
+  </ul>
+
+  <div class="box arch">
+    <span class="tag">◆ Architecture Note — состояние composable: локальное по умолчанию</span>
+    <p>Важно понимать момент создания состояния. Если <code>ref()</code> объявлен <em>внутри</em> функции <code>useXxx</code>, то каждый вызов <code>useXxx()</code> создаёт <strong>новый независимый</strong> экземпляр состояния — это то, что нужно для пагинации конкретного списка. Если же <code>ref()</code> объявлен <em>на уровне модуля</em>, вне функции, состояние становится <strong>общим</strong> для всех вызовов (singleton). Оба паттерна валидны, но их нельзя путать: общий <code>ref</code> на уровне модуля, случайно использованный для локального состояния, приведёт к тому, что два списка на одной странице начнут делить одну пагинацию.</p>
+  </div>
+
+  <h3>Базовые примитивы</h3>
+
+  <p>Начнём с трёх «кирпичей», из которых собираются все списки: debounce, пагинация, состояние таблицы. Они намеренно маленькие и независимые.</p>
+
+  <h4>useDebounce — убираем дублирование debounce из компонентов</h4>
+  <p>В анти-примере Раздела 1 debounce писался руками в каждом компоненте и не очищал таймер. Выносим его раз и навсегда. Обратите внимание на <code>onScopeDispose</code> — это и есть лечение «обновления состояния после unmount».</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/composables/useDebounce.js</span></div>
+<pre><code class="language-javascript">import { ref, watch, onScopeDispose } from 'vue'
+
+// Вариант 1 — debounce произвольной функции (для обработчиков).
+export function useDebounceFn(fn, delay = 400) {
+  let timer = null
+  const cancel = () =&gt; { if (timer) clearTimeout(timer); timer = null }
+
+  function debounced(...args) {
+    cancel()
+    timer = setTimeout(() =&gt; fn(...args), delay)
+  }
+
+  // КРИТИЧНО: снимаем таймер при разрушении scope (размонтировании).
+  // Иначе setTimeout выстрелит после unmount и обновит мёртвое состояние.
+  onScopeDispose(cancel)
+
+  return debounced
+}
+
+// Вариант 2 — debounced-копия реактивного источника (для v-model поиска).
+export function useDebouncedRef(source, delay = 400) {
+  const debounced = ref(source.value)
+  let timer = null
+
+  watch(source, (val) =&gt; {
+    clearTimeout(timer)
+    timer = setTimeout(() =&gt; { debounced.value = val }, delay)
+  })
+
+  onScopeDispose(() =&gt; clearTimeout(timer))
+  return debounced
+}</code></pre>
+  </div>
+
+  <p>Два варианта закрывают два сценария: <code>useDebounceFn</code> оборачивает действие (например, отправку запроса), <code>useDebouncedRef</code> создаёт «отложенную» копию строки поиска, на которую уже можно повесить <code>watch</code>. Дальше в фильтрах (Раздел 6) мы используем именно второй.</p>
+
+  <h4>usePagination — состояние страниц без знания о данных</h4>
+  <p>Пагинация не знает, <em>что</em> мы грузим. Она знает только про <code>page</code>, <code>limit</code>, <code>total</code> и производные. Это и делает её переиспользуемой: один и тот же composable обслуживает заказы, пользователей, товары.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/composables/usePagination.js</span></div>
+<pre><code class="language-javascript">import { ref, computed } from 'vue'
+
+export function usePagination({ perPage = 20 } = {}) {
+  const page = ref(1)
+  const limit = ref(perPage)
+  const total = ref(0)
+
+  const totalPages = computed(() =&gt;
+    Math.max(1, Math.ceil(total.value / limit.value)),
+  )
+  const offset = computed(() =&gt; (page.value - 1) * limit.value)
+  const isFirst = computed(() =&gt; page.value &lt;= 1)
+  const isLast = computed(() =&gt; page.value &gt;= totalPages.value)
+
+  function setPage(p) {
+    page.value = Math.min(Math.max(1, p), totalPages.value)
+  }
+  function next() { if (!isLast.value) page.value++ }
+  function prev() { if (!isFirst.value) page.value-- }
+  function reset() { page.value = 1 }
+
+  return {
+    page, limit, total, totalPages, offset,
+    isFirst, isLast, setPage, next, prev, reset,
+  }
+}</code></pre>
+  </div>
+
+  <h4>useTableState — сортировка и выбор строк</h4>
+  <p>Состояние таблицы (текущая сортировка, выбранные строки для batch-действий) тоже не зависит от домена. Заметьте трёхтактную сортировку: asc → desc → сброс — частое enterprise-требование, которое все реализуют по-разному, если оно не вынесено.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/composables/useTableState.js</span></div>
+<pre><code class="language-javascript">import { ref, computed } from 'vue'
+
+export function useTableState({ defaultSort = null } = {}) {
+  // sort: { field, order: 'asc' | 'desc' } | null
+  const sort = ref(defaultSort)
+  const selectedIds = ref(new Set())
+
+  function toggleSort(field) {
+    if (!sort.value || sort.value.field !== field) {
+      sort.value = { field, order: 'asc' }
+    } else if (sort.value.order === 'asc') {
+      sort.value = { field, order: 'desc' }
+    } else {
+      sort.value = null // третий клик — снимаем сортировку
+    }
+  }
+
+  const selectedCount = computed(() =&gt; selectedIds.value.size)
+
+  function toggleRow(id) {
+    // меняем ссылку на новый Set — самый предсказуемый способ
+    // гарантировать срабатывание реактивности на коллекции.
+    const next = new Set(selectedIds.value)
+    next.has(id) ? next.delete(id) : next.add(id)
+    selectedIds.value = next
+  }
+  function clearSelection() { selectedIds.value = new Set() }
+
+  return { sort, toggleSort, selectedIds, selectedCount, toggleRow, clearSelection }
+}</code></pre>
+  </div>
+
+  <h3>useCrudList — оркестратор, собранный из примитивов</h3>
+
+  <p>Теперь собираем «Стадию 3» из Раздела 2. <code>useCrudList</code> не дублирует логику — он <em>композирует</em> пагинацию и состояние таблицы, добавляет загрузку через repository и, главное, корректно лечит race condition через отмену устаревших запросов. Это сердце переиспользуемой архитектуры списков.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/composables/useCrudList.js</span></div>
+<pre><code class="language-javascript">import { ref, computed, watch } from 'vue'
+import { usePagination } from './usePagination'
+import { useTableState } from './useTableState'
+
+// Домен передаётся через repository — composable остаётся универсальным.
+export function useCrudList(repository, { perPage = 20, defaultSort = null } = {}) {
+  const items = ref([])
+  const loading = ref(false)
+  const error = ref(null)
+
+  const pagination = usePagination({ perPage })
+  const table = useTableState({ defaultSort })
+
+  const isEmpty = computed(() =&gt; !loading.value &amp;&amp; items.value.length === 0)
+
+  // Контроллер последнего запроса. Лечение race condition.
+  let controller = null
+
+  async function load() {
+    controller?.abort()                  // отменяем предыдущий запрос
+    const myController = new AbortController()
+    controller = myController
+    loading.value = true
+    error.value = null
+    try {
+      const { data, total } = await repository.fetchList(
+        {
+          page: pagination.page.value,
+          limit: pagination.limit.value,
+          sort: table.sort.value,
+        },
+        myController.signal,
+      )
+      if (myController.signal.aborted) return   // нас уже отменил более новый запрос
+      items.value = data
+      pagination.total.value = total
+    } catch (e) {
+      if (myController.signal.aborted) return    // отмена — это не ошибка
+      error.value = e
+    } finally {
+      // Гасим loading ТОЛЬКО если мы — актуальный (последний) запрос.
+      // Иначе устаревший запрос выключит спиннер посреди свежего.
+      if (controller === myController) loading.value = false
+    }
+  }
+
+  // Перезагрузка при смене страницы/лимита/сортировки.
+  watch(
+    () =&gt; [pagination.page.value, pagination.limit.value, table.sort.value],
+    load,
+    { deep: true },
+  )
+
+  return { items, loading, error, isEmpty, pagination, table, load }
+}</code></pre>
+  </div>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern — наивная отмена запроса</span>
+    <p>Распространённая ошибка — проверять в <code>finally</code> «глобальный» <code>controller.signal.aborted</code> вместо локального <code>myController</code>. Поскольку к моменту завершения старого запроса <code>controller</code> уже указывает на новый (неотменённый), проверка вернёт <code>false</code>, и завершившийся <em>старый</em> запрос выключит <code>loading</code> прямо посреди выполнения нового. Спиннер «мигает». Правило: <strong>каждый вызов <code>load()</code> владеет собственным контроллером</strong> и сравнивает себя с актуальным через <code>controller === myController</code>.</p>
+  </div>
+
+  <p>Использование в странице — теперь тривиально и единообразно для любого домена:</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">vue</span><span class="file">src/pages/OrdersListPage.vue</span></div>
+<pre><code class="language-xml">&lt;script setup&gt;
+import { onMounted } from 'vue'
+import { useCrudList } from '@/composables/useCrudList'
+import { ordersRepository } from '@/repository/orders.repository'
+
+const { items, loading, error, isEmpty, pagination, table, load } =
+  useCrudList(ordersRepository, { perPage: 25, defaultSort: { field: 'createdAt', order: 'desc' } })
+
+onMounted(load)
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;OrdersTable
+    :rows="items"
+    :loading="loading"
+    :sort="table.sort"
+    @sort="table.toggleSort"
+  /&gt;
+  &lt;TablePagination
+    :page="pagination.page"
+    :total-pages="pagination.totalPages"
+    @change="pagination.setPage"
+  /&gt;
+&lt;/template&gt;</code></pre>
+  </div>
+
+  <h3>God-composable — как не надо</h3>
+
+  <p>Composition API сам по себе не спасает от хаоса. Можно собрать тот же «компонент-помойку», только в виде функции на 500 строк. Это <strong>god-composable</strong>: он держит всё состояние экрана, ходит в сеть, синхронизирует URL, валидирует формы и форматирует данные одновременно.</p>
+
+  <div class="dual">
+    <div>
+      <div class="label-bad">✗ God-composable</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span></div>
+<pre><code class="language-javascript">// useOrdersScreen.js — 500 строк
+export function useOrdersScreen() {
+  // пагинация
+  const page = ref(1)
+  // фильтры
+  const filters = ref({})
+  // загрузка + axios прямо тут
+  // сборка query руками
+  // синхронизация с URL
+  // открытие модалки create
+  // валидация формы
+  // форматирование для таблицы
+  // ... ещё 450 строк
+  // → невозможно переиспользовать
+  //   ничего из этого по отдельности
+}</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="label-good">✓ Композиция узких composables</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span></div>
+<pre><code class="language-javascript">// каждый отвечает за одну ось
+const list = useCrudList(ordersRepository)
+const filters = useFilters(ordersFiltersSchema)
+const urlSync = useUrlSync(filters.state)
+const form = useEntityForm(ordersRepository)
+
+// связываем их в странице декларативно:
+watch(filters.applied, () =&gt; {
+  list.pagination.reset()
+  list.load()
+})
+// каждый кусок тестируется и
+// переиспользуется отдельно</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="box best">
+    <span class="tag">✦ Best Practice — «композиция, а не агрегация»</span>
+    <p>Если composable хочется назвать <code>useXxxScreen</code> или <code>useXxxEverything</code> — это сигнал god-composable. Здоровый composable называется по <em>оси поведения</em>: <code>useFilters</code>, <code>usePagination</code>, <code>useEntityForm</code>. Страница <em>композирует</em> несколько узких composables и связывает их несколькими <code>watch</code>. Правило проверки: каждый возвращаемый composable’ом метод и поле должны относиться к одной теме; если в одном <code>return</code> соседствуют <code>page</code>, <code>validateEmail</code> и <code>openModal</code> — он делает три разные работы.</p>
+  </div>
+
+  <h3>Reactivity pitfalls в composables</h3>
+
+  <p>Несколько ловушек реактивности, на которых регулярно спотыкаются даже опытные команды. Знание их экономит часы отладки «почему не обновляется».</p>
+
+  <ul>
+    <li><strong>Потеря реактивности при деструктуризации <code>reactive</code>.</strong> <code>const { page } = reactive({ page: 1 })</code> даёт обычное число, не связанное с источником. Поэтому composables возвращают <code>ref</code>/<code>computed</code>, а если возвращают <code>reactive</code> — то оборачивают в <code>toRefs</code>.</li>
+    <li><strong>Аргумент-примитив не реактивен.</strong> Если composable принимает значение, которое может меняться, принимайте <code>ref</code> или геттер и используйте <code>watch(() =&gt; getter())</code>, а не «снимок» значения в момент вызова.</li>
+    <li><strong><code>watch</code> по объекту без <code>deep</code> не среагирует на вложенные изменения</strong>, но <code>deep</code> на больших структурах дорог — об этом в Разделе 10.</li>
+    <li><strong>Composable должен вызываться синхронно в setup.</strong> Вызов <code>useXxx()</code> внутри <code>async</code>/колбэка теряет привязку к жизненному циклу компонента (lifecycle hooks и <code>onScopeDispose</code> не зарегистрируются).</li>
+  </ul>
+
+  <div class="box perf">
+    <span class="tag">◈ Performance Note</span>
+    <p><code>computed</code> кэшируется и пересчитывается только при изменении зависимостей — используйте его для производных значений вместо методов в шаблоне (метод вызывается на каждый рендер). Но не превращайте <code>computed</code> в место для побочных эффектов: внутри него только чтение и вычисление. Тяжёлые трансформации списка (маппинг тысяч строк) лучше делать один раз при загрузке в repository/adapter, а не в <code>computed</code>, который пересчитается при любом касании зависимостей.</p>
+  </div>
+
+  <div class="box scale">
+    <span class="tag">▣ Scaling Note</span>
+    <p>Каталог composables — это публичный API вашего фронтенда для самой команды. По мере роста проекта заведите им документацию (хотя бы JSDoc над каждой функцией: входы, возвращаемое, побочные эффекты). Через год состав команды сменится, и единственное, что отличает переиспользуемый примитив от «магической функции, которую боятся трогать» — это понятный задокументированный контракт. Composable без описания контракта переиспользуют копипастой, и вы снова получаете дублирование, только на уровень выше.</p>
+  </div>
+</section>
+
+<!-- ============ SECTION 4 ============ -->
+<section class="chapter" id="s4">
+  <h2 class="sec"><span class="secnum">Раздел 04</span>Repository Pattern</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">Repository — это граница, за которой заканчивается «приложение» и начинается «сеть». Выше неё код говорит на языке домена (<code>ordersRepository.fetchList()</code>), ниже — на языке HTTP (<code>GET /orders?status=...</code>). Эта граница — самое выгодное архитектурное вложение в CRUD-проекте: она изолирует приложение от контракта бэкенда, который <em>обязательно</em> будет меняться.</p>
+
+  <h3>Почему нельзя вызывать axios напрямую из компонента</h3>
+
+  <p>Это не догма ради чистоты. У запрета прямого <code>axios.get</code> в компоненте есть конкретные, измеримые последствия. Каждый прямой вызов из UI — это:</p>
+
+  <ul>
+    <li><strong>Размазанное знание о контракте.</strong> URL, формат параметров и форма ответа оказываются в компоненте. Бэкенд меняет <code>/orders</code> на <code>/v2/orders</code> или переименовывает поле — и вы ищете все вхождения по проекту.</li>
+    <li><strong>Невозможность единой политики.</strong> Авторизация, обработка ошибок, retry, отмена, логирование — всё это нужно навешивать на каждый вызов руками. На практике — забывают.</li>
+    <li><strong>Утечка DTO наверх.</strong> Компонент начинает знать <code>res.data.data.items</code>. Форма ответа бэкенда протекает в UI и в шаблоны.</li>
+    <li><strong>Нетестируемость.</strong> Чтобы протестировать компонент, нужно мокать сеть. С repository — достаточно подменить один объект.</li>
+  </ul>
+
+  <p>Repository превращает «N мест, знающих про сеть» в «одно место на домен». Это прямое исполнение цели «локализация изменений» из Раздела 1.</p>
+
+  <h3>Слои: api → repository → service → adapter</h3>
+
+  <p>Разделим обязанности явно. Каждый слой делает одну вещь и не лезет в соседний.</p>
+
+  <div class="diagram"><span class="cap">Слои доступа к данным и их ответственности</span>  <b>api/</b>        транспорт: axios-инстанс, interceptors, отмена, retry
+     │             «как ходить в сеть» — НЕ знает про домены
+     ▼
+  <b>repository/</b> домен: fetchList / fetchById / create / update / remove
+     │             «какие операции есть у Заказа» — оркеструет service+adapter
+     ├──▶ <b>services/</b>  чистая механика: queryBuilder, payloadBuilder (Разделы 6–7)
+     │                «как из фильтров собрать query» — без сети
+     └──▶ <b>adapters/</b>  маппинг DTO ⇄ доменная модель
+                      «как перевести язык API в язык приложения»</div>
+
+  <h4>api/ — транспорт и сквозные политики</h4>
+  <p>Инстанс <code>httpClient</code> мы завели в Разделе 2. Теперь навешиваем на него interceptors — единое место для авторизации, обработки ошибок и обновления токена. Это самый ценный кусок слоя <code>api/</code>: написанный один раз, он работает для всех запросов всех репозиториев.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/api/normalizeError.js</span></div>
+<pre><code class="language-javascript">// Единый формат ошибки для всего приложения.
+// Выше по стеку никто не парсит сырой axios-error — все видят ApiError.
+export class ApiError extends Error {
+  constructor({ status, code, message, fields }) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status          // HTTP-статус
+    this.code = code              // машинный код бэкенда (для ветвлений)
+    this.fields = fields || {}    // ошибки валидации по полям формы
+  }
+}
+
+export function normalizeError(error) {
+  if (error.code === 'ERR_CANCELED') return error // отмену не трогаем
+  const res = error.response
+  if (!res) {
+    return new ApiError({ status: 0, code: 'NETWORK', message: 'Нет связи с сервером' })
+  }
+  const data = res.data || {}
+  return new ApiError({
+    status: res.status,
+    code: data.code || `HTTP_${res.status}`,
+    message: data.message || 'Произошла ошибка',
+    fields: data.errors, // { email: ['уже занят'] } → удобно лечь на форму
+  })
+}</code></pre>
+  </div>
+
+  <p>Теперь interceptors. Здесь живёт самая хитрая часть — обновление токена при 401 с очередью параллельных запросов. Разберём её подробно после кода.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/api/interceptors.js</span></div>
+<pre><code class="language-javascript">import { httpClient } from './httpClient'
+import { normalizeError } from './normalizeError'
+import { useAuthStore } from '@/store/auth.store'
+import { authRepository } from '@/repository/auth.repository'
+
+// --- REQUEST: подставляем актуальный токен ---
+httpClient.interceptors.request.use((config) =&gt; {
+  const auth = useAuthStore()
+  if (auth.accessToken) {
+    config.headers.Authorization = `Bearer ${auth.accessToken}`
+  }
+  return config
+})
+
+// --- RESPONSE: refresh на 401 + нормализация ошибок ---
+let isRefreshing = false
+let waiters = [] // запросы, пришедшие во время обновления токена
+
+function resolveWaiters(token) { waiters.forEach((w) =&gt; w.resolve(token)); waiters = [] }
+function rejectWaiters(err)   { waiters.forEach((w) =&gt; w.reject(err));   waiters = [] }
+
+httpClient.interceptors.response.use(
+  (response) =&gt; response,
+  async (error) =&gt; {
+    const { response, config } = error
+    if (!response) return Promise.reject(normalizeError(error))
+
+    const is401 = response.status === 401 &amp;&amp; !config._retry
+    if (!is401) return Promise.reject(normalizeError(error))
+
+    // Уже идёт refresh — встаём в очередь и ждём новый токен.
+    if (isRefreshing) {
+      return new Promise((resolve, reject) =&gt; waiters.push({ resolve, reject }))
+        .then((token) =&gt; {
+          config.headers.Authorization = `Bearer ${token}`
+          return httpClient(config)
+        })
+    }
+
+    // Мы — первый словивший 401: запускаем refresh ровно один раз.
+    config._retry = true
+    isRefreshing = true
+    try {
+      const auth = useAuthStore()
+      const token = await authRepository.refresh(auth.refreshToken)
+      auth.setAccessToken(token)
+      resolveWaiters(token)                 // отпускаем очередь
+      config.headers.Authorization = `Bearer ${token}`
+      return httpClient(config)             // повторяем исходный запрос
+    } catch (e) {
+      rejectWaiters(e)
+      useAuthStore().logout()               // refresh не удался — разлогин
+      return Promise.reject(normalizeError(e))
+    } finally {
+      isRefreshing = false
+    }
+  },
+)</code></pre>
+  </div>
+
+  <div class="box arch">
+    <span class="tag">◆ Architecture Note — почему очередь, а не «refresh на каждый 401»</span>
+    <p>На странице со списком, графиком и счётчиками одновременно летят 5–6 запросов. Когда токен протух, все они вернут 401 практически одновременно. Без очереди каждый запустит свой refresh — это 5–6 параллельных обновлений, гонка за <code>refreshToken</code> (а он часто одноразовый!) и каскадный разлогин. Флаг <code>isRefreshing</code> + массив <code>waiters</code> гарантируют, что refresh выполняется <strong>ровно один раз</strong>, а все остальные запросы тихо ждут новый токен и затем повторяются. Это один из самых частых «плавающих» багов авторизации в SPA.</p>
+  </div>
+
+  <h4>Отмена и retry — транспортные утилиты</h4>
+  <p>Отмену мы уже используем в <code>useCrudList</code> через <code>AbortController</code> — axios понимает <code>signal</code> нативно. Retry же — отдельная утилита, и к ней нужно относиться осторожно.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/api/withRetry.js</span></div>
+<pre><code class="language-javascript">// Retry ТОЛЬКО для идемпотентных операций (GET).
+// POST/PATCH/DELETE вслепую не ретраим — рискуем создать дубль заказа.
+export async function withRetry(fn, { retries = 2, baseDelay = 300 } = {}) {
+  let attempt = 0
+  while (true) {
+    try {
+      return await fn()
+    } catch (e) {
+      attempt++
+      const retriable = e.status &gt;= 500 || e.code === 'NETWORK'
+      if (!retriable || attempt &gt; retries) throw e
+      // экспоненциальный backoff: 300 → 600 → 1200 мс
+      await new Promise((r) =&gt; setTimeout(r, baseDelay * 2 ** (attempt - 1)))
+    }
+  }
+}</code></pre>
+  </div>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern — retry на всех методах</span>
+    <p>Соблазнительно завернуть retry в interceptor и применить ко всему. Это опасно: повтор <code>POST /orders</code> после таймаута может создать <strong>два заказа</strong>, если первый запрос на самом деле дошёл до бэкенда, а потерялся только ответ. Ретраить можно только идемпотентные операции (GET, и осознанно — PUT/DELETE). Для POST либо не ретраить вовсе, либо использовать идемпотентные ключи (<code>Idempotency-Key</code>), которые поддерживает бэкенд.</p>
+  </div>
+
+  <h4>adapters/ — граница языка</h4>
+  <p>Адаптер — место, где <code>order_number</code> бэкенда становится <code>number</code> приложения, а строка <code>"2024-01-15T..."</code> — объектом <code>Date</code>. Это единственное место, которое знает форму DTO. Поменялся контракт — правим один адаптер, остальное приложение не замечает.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/repository/adapters/order.adapter.js</span></div>
+<pre><code class="language-javascript">// DTO (язык API)  ⇄  доменная модель (язык приложения)
+export function mapOrderFromApi(dto) {
+  return {
+    id: dto.id,
+    number: dto.order_number,
+    status: dto.status,
+    customerName: dto.customer?.full_name ?? '—',
+    total: Number(dto.total_amount),
+    createdAt: dto.created_at ? new Date(dto.created_at) : null,
+  }
+}
+
+export function mapOrderToApi(model) {
+  return {
+    customer_id: model.customerId,
+    status: model.status,
+    items: model.items?.map((i) =&gt; ({ product_id: i.productId, qty: i.qty })),
+  }
+}</code></pre>
+  </div>
+
+  <h3>Базовая фабрика репозитория</h3>
+
+  <p>95% CRUD-методов идентичны от домена к домену: список, элемент по id, создание, обновление, удаление. Выносим их в фабрику — это «правило трёх» из Раздела 2 в действии. Домен задаёт только <code>resource</code> и пару адаптеров.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/repository/createCrudRepository.js</span></div>
+<pre><code class="language-javascript">import { httpClient } from '@/api/httpClient'
+import { buildQuery } from '@/services/queryBuilder.service' // см. Раздел 6
+
+export function createCrudRepository({ resource, fromApi = (x) =&gt; x, toApi = (x) =&gt; x }) {
+  return {
+    async fetchList(params, signal) {
+      const res = await httpClient.get(`/${resource}`, {
+        params: buildQuery(params),  // сериализация query — в сервисе, не здесь
+        signal,                      // отмена через AbortController
+      })
+      const body = res.data
+      return {
+        data: (body.data ?? body.items ?? []).map(fromApi),
+        total: body.meta?.total ?? body.total ?? 0,
+      }
+    },
+    async fetchById(id, signal) {
+      const res = await httpClient.get(`/${resource}/${id}`, { signal })
+      return fromApi(res.data.data ?? res.data)
+    },
+    async create(model) {
+      const res = await httpClient.post(`/${resource}`, toApi(model))
+      return fromApi(res.data.data ?? res.data)
+    },
+    async update(id, model) {
+      const res = await httpClient.patch(`/${resource}/${id}`, toApi(model))
+      return fromApi(res.data.data ?? res.data)
+    },
+    async remove(id) {
+      await httpClient.delete(`/${resource}/${id}`)
+      return id
+    },
+  }
+}</code></pre>
+  </div>
+
+  <h3>Конкретные репозитории</h3>
+
+  <p>Домен берёт фабрику и при необходимости дополняет её специфичными методами. Обратите внимание: <code>UserRepository</code> и <code>ProductRepository</code> почти пустые — вся типовая механика уже в фабрике. <code>OrdersRepository</code> добавляет доменную операцию <code>cancel</code>.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/repository/orders.repository.js</span></div>
+<pre><code class="language-javascript">import { httpClient } from '@/api/httpClient'
+import { createCrudRepository } from './createCrudRepository'
+import { mapOrderFromApi, mapOrderToApi } from './adapters/order.adapter'
+
+export const ordersRepository = {
+  ...createCrudRepository({
+    resource: 'orders',
+    fromApi: mapOrderFromApi,
+    toApi: mapOrderToApi,
+  }),
+  // Доменно-специфичные методы дополняют типовой CRUD:
+  async cancel(id, reason) {
+    const res = await httpClient.post(`/orders/${id}/cancel`, { reason })
+    return mapOrderFromApi(res.data.data)
+  },
+}</code></pre>
+  </div>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/repository/users.repository.js + products.repository.js</span></div>
+<pre><code class="language-javascript">import { createCrudRepository } from './createCrudRepository'
+import { mapUserFromApi, mapUserToApi } from './adapters/user.adapter'
+import { mapProductFromApi, mapProductToApi } from './adapters/product.adapter'
+
+// Целый репозиторий пользователей — несколько строк.
+export const usersRepository = createCrudRepository({
+  resource: 'users',
+  fromApi: mapUserFromApi,
+  toApi: mapUserToApi,
+})
+
+export const productsRepository = createCrudRepository({
+  resource: 'products',
+  fromApi: mapProductFromApi,
+  toApi: mapProductToApi,
+})</code></pre>
+  </div>
+
+  <div class="box best">
+    <span class="tag">✦ Best Practice — repository чистый и без реактивности</span>
+    <p>Repository возвращает <strong>обычные данные и Promise</strong>, без <code>ref</code> и <code>reactive</code>. Реактивность — это ответственность store/composable, которые <em>используют</em> repository. Такое разделение даёт два бонуса: repository тестируется как чистая асинхронная функция (без Vue вообще), и его можно переиспользовать вне компонентного контекста — в guard роутера, в фоновом задании, в SSR. Как только в repository проникает <code>ref</code> — он перестаёт быть переносимым и его нельзя вызвать там, где нет Vue-реактивности.</p>
+  </div>
+
+  <h3>Полный жизненный цикл запроса</h3>
+
+  <p>Соберём картину целиком — это та самая сквозная линия из Раздела 1, теперь с заполненными слоями. Проследите путь данных от клика до рендера и обратно.</p>
+
+  <div class="diagram"><span class="cap">Request lifecycle — от действия пользователя до рендера и обратно</span>  Пользователь меняет фильтр / страницу
+     │
+     ▼
+  <b>Page</b> → watch замечает изменение → вызывает <b>useCrudList.load()</b>
+     │
+     ▼
+  <b>useCrudList</b>: controller.abort() прошлого → новый AbortController → loading = true
+     │
+     ▼
+  <b>repository.fetchList(params, signal)</b>
+     │           │
+     │           └──▶ <b>services/queryBuilder</b>: { status, dateFrom } → ?status=...&amp;date_from=...
+     ▼
+  <b>httpClient.get</b>
+     │
+     ├──▶ request interceptor: + Authorization: Bearer ...
+     ▼
+  ──────────────── сеть ────────────────▶ <b>Backend API</b>
+     ◀─────────────── ответ ─────────────
+     │
+     ├──◀ response interceptor: 401? → refresh+retry. Ошибка? → normalizeError → ApiError
+     ▼
+  <b>repository</b>: body.data.map(<b>adapter.fromApi</b>)  ← DTO → доменная модель
+     │
+     ▼
+  <b>useCrudList</b>: проверка signal.aborted → items = data, total = ... → loading = false
+     │
+     ▼
+  <b>Page</b> → props → <b>OrdersTable</b> рендерит строки  ·  состояния loading / empty / error</div>
+
+  <div class="box ent">
+    <span class="tag">■ Enterprise Recommendation</span>
+    <p>Зафиксируйте в проекте, что <strong>ни один компонент и ни один store не импортирует <code>axios</code> напрямую</strong> — только через repository. Это правило легко проверять линтером (<code>no-restricted-imports</code> на <code>axios</code> вне папки <code>api/</code> и <code>repository/</code>). Цена нарушения растёт со временем нелинейно: первый прямой <code>axios.get</code> в компоненте безобиден, но он создаёт прецедент, и через полгода у вас снова N точек, знающих про сеть. Граница repository ценна только тогда, когда она <em>непротекаема</em> — одна дырка обесценивает весь слой.</p>
+  </div>
+
+  <div class="box scale">
+    <span class="tag">▣ Scaling Note — версионирование контракта</span>
+    <p>Бэкенд в долгоживущем продукте меняет контракты — это норма, а не исключение. Слой <code>adapters/</code> — ваша страховка: при переходе <code>/v1</code> → <code>/v2</code> вы держите оба адаптера и переключаете их по фиче-флагу, не трогая ни один компонент. Без адаптеров миграция версии API превращается в проект на квартал; с адаптерами — в точечную работу в одной папке. Это и есть смысл фразы «архитектура для 2–5 лет»: вы платите за границы сейчас, чтобы не платить за каждую миграцию потом.</p>
+  </div>
+
+  <p>Слой данных готов: транспорт изолирован, домены говорят на своём языке, запросы отменяются и переживают протухший токен. В следующем разделе мы используем этот фундамент для полноценного CRUD — создание, чтение, обновление, удаление, оптимистичные и пессимистичные обновления, инвалидация кэша, формы и редактируемые таблицы.</p>
+</section>
+
+<!-- ============ SECTION 5 ============ -->
+<section class="chapter" id="s5">
+  <h2 class="sec"><span class="secnum">Раздел 05</span>Работа с CRUD</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">CRUD — это не четыре метода, а четыре <em>сценария взаимодействия</em>, у каждого из которых есть состояние, обработка ошибок, влияние на список и компромисс между скоростью отклика и консистентностью. В этом разделе мы превращаем repository (Раздел 4) и composables (Раздел 3) в законченные операции создания, чтения, обновления и удаления, и собираем переиспользуемую оркестрацию, которая одинаково работает для любого домена.</p>
+
+  <h3>Четыре операции и их состояния</h3>
+
+  <p>Каждая буква CRUD требует своего набора UI-состояний. Игнорирование любого из них — источник «зависших спиннеров» и «кнопок, по которым кликнули дважды».</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Операция</th><th>Состояния, которые нужно обработать</th><th>Влияние на список</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Create</strong></td><td>idle → saving → success / validation-error</td><td>появляется строка (reload или вставка)</td></tr>
+      <tr><td><strong>Read</strong></td><td>loading → loaded / empty / error / stale-cancel</td><td>—</td></tr>
+      <tr><td><strong>Update</strong></td><td>saving → success / validation-error / conflict (409)</td><td>меняется строка</td></tr>
+      <tr><td><strong>Delete</strong></td><td>confirm → deleting → success / error</td><td>исчезает строка (откат при ошибке)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>useEntityForm — форма создания/редактирования</h3>
+
+  <p>Create и Update — это, по сути, одна форма в двух режимах. Разница лишь в наличии <code>id</code> и в методе repository. Выносим это в composable, который заодно раскладывает серверные ошибки валидации (<code>ApiError.fields</code> из Раздела 4) обратно на поля формы.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/composables/useEntityForm.js</span></div>
+<pre><code class="language-javascript">import { reactive, ref, computed } from 'vue'
+import { deepClone } from '@/utils/object'
+
+export function useEntityForm(repository, { initial = () =&gt; ({}) } = {}) {
+  const model = reactive(initial())
+  const id = ref(null)
+  const saving = ref(false)
+  const errors = ref({})                 // ошибки валидации по полям с бэкенда
+  const isEdit = computed(() =&gt; id.value != null)
+
+  function fill(data = {}) {
+    Object.assign(model, initial(), deepClone(data))
+    errors.value = {}
+  }
+  function openCreate() { id.value = null; fill() }
+  function openEdit(entity) { id.value = entity.id; fill(entity) }
+
+  async function submit() {
+    saving.value = true
+    errors.value = {}
+    try {
+      // create или update — решает наличие id
+      return isEdit.value
+        ? await repository.update(id.value, model)
+        : await repository.create(model)
+    } catch (e) {
+      if (e.fields) errors.value = e.fields   // { email: ['занят'] } → на поля
+      throw e                                  // отдаём наверх для тоста
+    } finally {
+      saving.value = false
+    }
+  }
+
+  return { model, errors, saving, isEdit, openCreate, openEdit, submit }
+}</code></pre>
+  </div>
+
+  <p>В шаблоне формы ошибки полей подключаются напрямую — пользователь видит их под нужным инпутом, а не одним общим тостом «что-то пошло не так»:</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">vue</span><span class="file">src/components/OrderFormModal.vue (фрагмент)</span></div>
+<pre><code class="language-xml">&lt;template&gt;
+  &lt;BaseModal :open="open" @close="$emit('close')"&gt;
+    &lt;BaseInput
+      v-model="model.customerName"
+      label="Клиент"
+      :error="errors.customer_name?.[0]"
+    /&gt;
+    &lt;BaseSelect v-model="model.status" :options="statusOptions" label="Статус" /&gt;
+    &lt;template #footer&gt;
+      &lt;BaseButton :loading="saving" @click="onSubmit"&gt;
+        {{ isEdit ? 'Сохранить' : 'Создать' }}
+      &lt;/BaseButton&gt;
+    &lt;/template&gt;
+  &lt;/BaseModal&gt;
+&lt;/template&gt;</code></pre>
+  </div>
+
+  <h3>Optimistic vs Pessimistic updates</h3>
+
+  <p>Это центральный архитектурный выбор CRUD: показать результат <em>до</em> ответа сервера (оптимистично) или <em>после</em> (пессимистично). Выбор не стилистический — у него разные гарантии консистентности и разная цена ошибки.</p>
+
+  <div class="dual">
+    <div>
+      <div class="label-good">✓ Pessimistic — надёжно</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span></div>
+<pre><code class="language-javascript">// ждём сервер, потом обновляем UI
+async function remove(id) {
+  deleting.value = id
+  try {
+    await repository.remove(id)
+    await load()   // перезагрузка = гарантированно консистентно
+  } finally {
+    deleting.value = null
+  }
+}
+// + всегда корректно
+// − видимая задержка, нужен спиннер</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="label-good">✓ Optimistic — отзывчиво</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span></div>
+<pre><code class="language-javascript">// меняем UI сразу, откат при ошибке
+async function remove(id) {
+  const snapshot = items.value
+  items.value = items.value
+    .filter((x) =&gt; x.id !== id)   // мгновенно
+  try {
+    await repository.remove(id)
+  } catch (e) {
+    items.value = snapshot         // ОТКАТ
+    throw e
+  }
+}
+// + мгновенный отклик
+// − нужен снимок и откат</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="box arch">
+    <span class="tag">◆ Architecture Note — когда что выбирать</span>
+    <p>Оптимистичные обновления уместны для <strong>частых, дешёвых, почти всегда успешных</strong> действий: переключить флаг «избранное», отметить задачу выполненной, удалить из списка. Пессимистичные — для <strong>денежных, редких, конфликтных</strong> операций: провести платёж, изменить статус заказа, всё, где ошибочный откат хуже задержки. Правило: <em>чем дороже последствие неверного отображения, тем пессимистичнее операция</em>. Финтех по умолчанию пессимистичен; UI-мелочи — оптимистичны. И главное: <strong>оптимистичное обновление без реализованного отката — это баг, а не оптимизация</strong>.</p>
+  </div>
+
+  <h3>Инвалидация кэша после мутаций</h3>
+
+  <p>После create/update/delete список на экране устаревает. Есть три стратегии синхронизации, и у каждой свой компромисс «корректность / количество запросов / сложность».</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Стратегия</th><th>Как</th><th>Плюс</th><th>Минус</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Refetch</strong></td><td>после мутации <code>load()</code> заново</td><td>всегда консистентно, просто</td><td>лишний запрос, моргание</td></tr>
+      <tr><td><strong>Local patch</strong></td><td>правим элемент в <code>items</code> вручную</td><td>быстро, без запроса</td><td>риск drift с сервером (вычисляемые поля)</td></tr>
+      <tr><td><strong>Stale + lazy</strong></td><td>помечаем «грязным», грузим при след. визите</td><td>экономит запросы</td><td>сложнее, нужно управлять флагом</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern — local patch там, где сервер всё пересчитывает</span>
+    <p>Соблазнительно после <code>update</code> просто вписать ответ сервера в строку списка. Но если бэкенд при обновлении пересчитывает <em>другие</em> поля (итоговую сумму, позицию в сортировке, агрегаты в шапке) — local patch покажет рассинхрон: строка обновилась, а «Итого» вверху осталось старым. На списках с серверными агрегатами, сортировкой или пагинацией <strong>refetch почти всегда правильнее local patch</strong>: один лишний запрос дешевле, чем класс багов «данные на экране не сходятся между собой».</p>
+  </div>
+
+  <h3>useCrud — переиспользуемая оркестрация</h3>
+
+  <p>Соберём всё в единый оркестратор, который страница подключает одной строкой. Он композирует список (Раздел 3), форму и действия с выбранной стратегией инвалидации. Это финальная «Стадия 3» для CRUD.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/composables/useCrud.js</span></div>
+<pre><code class="language-javascript">import { ref } from 'vue'
+import { useCrudList } from './useCrudList'
+import { useEntityForm } from './useEntityForm'
+
+export function useCrud(repository, options = {}) {
+  const list = useCrudList(repository, options)
+  const form = useEntityForm(repository, options)
+  const modalOpen = ref(false)
+
+  function createNew() { form.openCreate(); modalOpen.value = true }
+  function edit(row)   { form.openEdit(row); modalOpen.value = true }
+
+  async function save() {
+    await form.submit()       // create или update
+    modalOpen.value = false
+    await list.load()         // refetch — консистентность по умолчанию
+  }
+
+  async function remove(row) {
+    // оптимистичное удаление с откатом
+    const snapshot = list.items.value
+    list.items.value = snapshot.filter((x) =&gt; x.id !== row.id)
+    try {
+      await repository.remove(row.id)
+    } catch (e) {
+      list.items.value = snapshot
+      throw e
+    }
+  }
+
+  return { ...list, form, modalOpen, createNew, edit, save, remove }
+}</code></pre>
+  </div>
+
+  <div class="diagram"><span class="cap">CRUD orchestration — действие пользователя → оркестратор → слои → реакция списка</span>  [+ Создать]            [✎ Строка]           [🗑 Строка]
+      │                      │                     │
+      ▼                      ▼                     ▼
+  form.openCreate()     form.openEdit(row)    remove(row)
+      │                      │                     │
+      ▼                      ▼              optimistic: убрать из items
+  modalOpen = true      modalOpen = true           │
+      │                      │                      ▼
+      └─────── save() ───────┘              repository.remove(id)
+                  │                                 │
+                  ▼                          ok ─▶ остаётся убранной
+         form.submit() → create/update       err ─▶ ОТКАТ (вернуть snapshot)
+                  │
+                  ▼
+         list.load()  ← refetch: консистентный список + агрегаты
+                  │
+                  ▼
+         OrdersTable перерисовывается</div>
+
+  <h3>Inline-editing в таблицах</h3>
+
+  <p>Отдельный сценарий — редактирование прямо в ячейке, без модалки. Здесь ключевое требование: <strong>состояние редактирования держится на строку</strong>, не глобально, и сохранение должно быть оптимистичным с откатом конкретной ячейки.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/composables/useInlineEdit.js</span></div>
+<pre><code class="language-javascript">import { ref } from 'vue'
+
+export function useInlineEdit(repository, items) {
+  const editingId = ref(null)
+  const draftValue = ref(null)
+  const savingId = ref(null)
+
+  function start(row, field) {
+    editingId.value = `${row.id}:${field}`
+    draftValue.value = row[field]
+  }
+  function cancel() { editingId.value = null }
+
+  async function commit(row, field) {
+    const original = row[field]
+    if (draftValue.value === original) { cancel(); return }
+    row[field] = draftValue.value     // оптимистично пишем в строку
+    savingId.value = row.id
+    editingId.value = null
+    try {
+      await repository.update(row.id, { [field]: draftValue.value })
+    } catch (e) {
+      row[field] = original           // откат конкретной ячейки
+      throw e
+    } finally {
+      savingId.value = null
+    }
+  }
+
+  return { editingId, draftValue, savingId, start, cancel, commit }
+}</code></pre>
+  </div>
+
+  <div class="box best">
+    <span class="tag">✦ Best Practice — разделяй «черновик» и «истину»</span>
+    <p>Во всех формах редактирования держите <em>две</em> версии данных: исходную (то, что пришло/было сохранено) и черновик (то, что правит пользователь). Сабмит превращает черновик в истину; отмена и ошибка возвращают черновик к истине. Это правило одинаково работает в модальной форме (<code>useEntityForm</code>), inline-редактировании (<code>useInlineEdit</code>) и в фильтрах (Раздел 6, <code>draft</code>/<code>applied</code>). Когда черновик и истина — это один и тот же объект, любая ошибка сохранения оставляет UI в неопределённом состоянии, а «отмена» становится невозможной.</p>
+  </div>
+
+  <div class="box scale">
+    <span class="tag">▣ Scaling Note — batch-операции</span>
+    <p>В enterprise быстро приходит требование «выделить 200 строк и удалить/сменить статус». Состояние выбора у нас уже есть (<code>useTableState.selectedIds</code> из Раздела 3). Но наивный цикл <code>for (id of selected) await repository.remove(id)</code> — это 200 последовательных запросов и минута ожидания. Проектируйте batch-эндпоинты с бэкендом заранее (<code>POST /orders/bulk-delete</code> с массивом id) и показывайте прогресс. Если batch-эндпоинта нет — ограничивайте параллелизм (например, по 5 одновременно), а не запускайте 200 промисов разом, иначе упрётесь в лимит соединений браузера и в rate limit бэкенда.</p>
+  </div>
+
+  <div class="box perf">
+    <span class="tag">◈ Performance Note</span>
+    <p>После создания/удаления соблазнительно делать оптимистичный local patch ради скорости — но на больших списках это провоцирует пересортировку и пересчёт <code>computed</code> на каждую мутацию. Если список и так перезагружается часто, <code>refetch</code> с правильной отменой устаревших запросов (Раздел 4) обычно даёт более предсказуемый профиль производительности, чем россыпь точечных мутаций реактивного массива, каждая из которых триггерит реактивные зависимости.</p>
+  </div>
+</section>
+
+<!-- ============ SECTION 6 ============ -->
+<section class="chapter" id="s6">
+  <h2 class="sec"><span class="secnum">Раздел 06</span>Фильтры</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">Фильтры — самая недооценённая и самая «протекающая» подсистема enterprise-фронтенда. Внешне это пара селектов и поле поиска; по сути — это синхронизация четырёх источников правды (UI, состояние, URL, бэкенд), debounce, гонки запросов, сериализация и сохранение. Именно здесь рождается большинство багов «показывает не то, что в запросе». Этот раздел — самый большой в документе, и не случайно.</p>
+
+  <h3>Четыре источника правды и кто из них главный</h3>
+
+  <p>В фильтрах одновременно сосуществуют четыре представления состояния, и проект ломается, когда они расходятся:</p>
+
+  <ul>
+    <li><strong>UI</strong> — что показывают контролы (выбранный статус в селекте).</li>
+    <li><strong>State</strong> — реактивное состояние фильтров в приложении.</li>
+    <li><strong>URL</strong> — query-параметры (<code>?status=paid&amp;page=2</code>).</li>
+    <li><strong>Backend</strong> — параметры, реально ушедшие в запрос.</li>
+  </ul>
+
+  <p>Главный архитектурный вопрос: <strong>кто из них источник правды?</strong> Наивный подход делает источником state в компоненте, а URL — побочным эффектом (или вовсе про него забывает). Enterprise-подход делает источником правды <strong>URL</strong>, а всё остальное — производными от него.</p>
+
+  <div class="box arch">
+    <span class="tag">◆ Architecture Note — почему URL как источник правды</span>
+    <p>URL-driven фильтры дают то, что бизнес требует почти всегда, но формулирует поздно: <em>(1)</em> ссылку на отфильтрованный список можно переслать коллеге, и он увидит то же самое; <em>(2)</em> F5 не сбрасывает фильтры; <em>(3)</em> кнопки «назад/вперёд» в браузере работают предсказуемо; <em>(4)</em> возврат с карточки сущности в список сохраняет контекст. Если источник правды — локальный <code>ref</code> в компоненте, все четыре свойства приходится докручивать костылями, и они разъезжаются. С URL как источником правды они получаются <em>бесплатно</em>. State при этом — лишь типизированная проекция query-параметров.</p>
+  </div>
+
+  <h3>draft vs applied — два состояния фильтра</h3>
+
+  <p>Второе ключевое разделение (после источника правды). Не все фильтры применяются одинаково: селект статуса срабатывает мгновенно, поиск — после паузы (debounce), а сложная панель «дополнительные фильтры» — по кнопке «Применить». Чтобы это работало, нужно различать <strong>draft</strong> (что пользователь редактирует прямо сейчас) и <strong>applied</strong> (что реально ушло в запрос).</p>
+
+  <div class="diagram"><span class="cap">Жизненный цикл значения фильтра: draft → (триггер применения) → applied → query → запрос</span>  Пользователь печатает / выбирает
+        │
+        ▼
+   <b>draft</b> (черновик, реактивный)
+        │
+        ├── search       ──▶ debounce 400мс ──┐
+        ├── select/bool  ──▶ сразу ───────────┤
+        └── advanced     ──▶ по кнопке «Применить» ─┤
+                                                    ▼
+                                              <b>applied</b> (применённое)
+                                                    │
+                                                    ▼  serializeFilters (Раздел 7)
+                                              <b>query</b>  { status, date_from, ... }
+                                                    │
+                                  pagination.reset() ──┤  (КРИТИЧНО: сброс на стр. 1)
+                                                    ▼
+                                              useCrudList.load()  ──▶ запрос (с отменой)
+                                                    │
+                                       параллельно ▼
+                                              router.replace({ query })  ──▶ URL</div>
+
+  <h3>Декларативная схема фильтров</h3>
+
+  <p>Чтобы не писать логику каждого фильтра руками (и не плодить дубли — главная болезнь из Раздела 1), описываем фильтры списка <em>декларативно</em>. Схема — единственный источник знания о том, какие фильтры есть, их типы, дефолты и поведение.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/constants/filterTypes.js + orders.filters.js</span></div>
+<pre><code class="language-javascript">export const FILTER_TYPES = {
+  SEARCH: 'search',          // строка, применяется с debounce
+  SELECT: 'select',          // одно значение, мгновенно
+  MULTISELECT: 'multiselect',// массив, мгновенно
+  DATE_RANGE: 'dateRange',   // { from, to }
+  BOOLEAN: 'boolean',        // флаг
+}
+
+// Схема фильтров списка заказов — единственный источник правды.
+export const ordersFiltersSchema = [
+  { key: 'search', type: FILTER_TYPES.SEARCH, default: '' },
+  { key: 'status', type: FILTER_TYPES.MULTISELECT, default: [] },
+  { key: 'createdAt', type: FILTER_TYPES.DATE_RANGE, default: { from: null, to: null } },
+  { key: 'onlyPaid', type: FILTER_TYPES.BOOLEAN, default: false },
+]</code></pre>
+  </div>
+
+  <h3>useFilters — ядро системы фильтрации</h3>
+
+  <p>Composable, который из схемы строит draft/applied, развешивает правильные триггеры применения (мгновенно или debounce) и даёт reset. Это сердце переиспользуемой фильтрации — один на все списки проекта.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/composables/useFilters.js</span></div>
+<pre><code class="language-javascript">import { reactive, ref, computed, watch, toRaw } from 'vue'
+import { useDebounceFn } from './useDebounce'
+import { deepClone } from '@/utils/object'
+
+export function useFilters(schema, { onApply, debounce = 400 } = {}) {
+  const buildDefaults = () =&gt;
+    schema.reduce((acc, f) =&gt; { acc[f.key] = deepClone(f.default); return acc }, {})
+
+  const draft = reactive(buildDefaults())          // что редактирует пользователь
+  const applied = ref(buildDefaults())             // что ушло в запрос
+
+  function apply() {
+    applied.value = deepClone(toRaw(draft))
+    onApply?.(applied.value)                        // обычно: reset page + load
+  }
+  const applyDebounced = useDebounceFn(apply, debounce)
+
+  // Триггер применения зависит от типа фильтра.
+  schema.forEach((f) =&gt; {
+    watch(
+      () =&gt; draft[f.key],
+      () =&gt; (f.type === 'search' ? applyDebounced() : apply()),
+      { deep: true },                               // для массивов и dateRange
+    )
+  })
+
+  function reset() {
+    Object.assign(draft, buildDefaults())
+    apply()
+  }
+
+  const isDirty = computed(
+    () =&gt; JSON.stringify(toRaw(draft)) !== JSON.stringify(buildDefaults()),
+  )
+
+  return { draft, applied, apply, reset, isDirty }
+}</code></pre>
+  </div>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern — один deep-watch на весь объект фильтров</span>
+    <p>Частая ошибка — вешать единый <code>watch(filters, load, { deep: true })</code> на весь объект. Тогда поиск (который должен идти с debounce) и селект (мгновенный) применяются <em>одинаково</em>: либо всё с задержкой, либо всё без неё. А ещё deep-watch на большой структуре дорог и срабатывает на каждое микро-изменение. Правильно — <strong>отдельный watch на каждый фильтр</strong> с поведением, зависящим от его типа, как в коде выше. Это разделение и есть причина, по которой фильтры описаны схемой.</p>
+  </div>
+
+  <h3>Сериализация: state → query params</h3>
+
+  <p>Самая «грязная» часть — превращение состояния в query. Здесь живут все ошибки из Раздела 1: пустые строки уходят как значения, булевы как <code>"false"</code>, даты в локальном формате. Выносим всё в <strong>чистый сервис</strong> (Раздел 7 развивает эту тему для payload). Один сериализатор — единый, проверяемый формат для всех списков.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/services/queryBuilder.service.js</span></div>
+<pre><code class="language-javascript">import { formatDateOnly } from '@/utils/date'
+
+// Полный query из состояния списка: фильтры + пагинация + сортировка.
+export function buildQuery({ page, limit, sort, filters = {} } = {}) {
+  const q = {}
+  if (page) q.page = page
+  if (limit) q.per_page = limit
+  if (sort) q.sort = `${sort.order === 'desc' ? '-' : ''}${sort.field}` // -createdAt
+  return { ...q, ...serializeFilters(filters) }
+}
+
+export function serializeFilters(filters) {
+  const out = {}
+  for (const [key, value] of Object.entries(filters)) {
+    if (isEmpty(value)) continue                          // пустое НЕ отправляем
+
+    if (Array.isArray(value)) {
+      out[key] = value.join(',')                          // multiselect → "paid,new"
+    } else if (isDateRange(value)) {
+      if (value.from) out[`${key}_from`] = formatDateOnly(value.from) // ISO date
+      if (value.to)   out[`${key}_to`]   = formatDateOnly(value.to)
+    } else if (typeof value === 'boolean') {
+      if (value) out[key] = 1                              // только true → 1
+    } else {
+      out[key] = value
+    }
+  }
+  return out
+}
+
+function isDateRange(v) {
+  return v &amp;&amp; typeof v === 'object' &amp;&amp; !Array.isArray(v) &amp;&amp; ('from' in v || 'to' in v)
+}
+function isEmpty(v) {
+  if (v === '' || v == null) return true
+  if (Array.isArray(v)) return v.length === 0
+  if (isDateRange(v)) return !v.from &amp;&amp; !v.to
+  return false
+}</code></pre>
+  </div>
+
+  <div class="box best">
+    <span class="tag">✦ Best Practice — «пустое не отправляем»</span>
+    <p>Главное правило сериализации фильтров: <strong>отсутствие фильтра ≠ фильтр с пустым значением</strong>. <code>status=''</code> на бэкенде часто значит «статус равен пустой строке» и возвращает ноль результатов, а намерение было «не фильтровать по статусу». Поэтому <code>isEmpty</code>-значения <em>выпадают</em> из query целиком, а не уходят пустыми. Это же правило критично для URL: пустые параметры засоряют ссылку (<code>?search=&amp;status=&amp;date_from=</code>) и ломают её читаемость и сравнение.</p>
+  </div>
+
+  <h3>Синхронизация с URL</h3>
+
+  <p>Теперь связываем applied-фильтры с URL в обе стороны. Тонкое место — не устроить бесконечный цикл «state → URL → state → URL». Решается флагом-предохранителем и использованием <code>router.replace</code> (а не <code>push</code>, чтобы не плодить записи в истории на каждое нажатие клавиши).</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/composables/useUrlSync.js</span></div>
+<pre><code class="language-javascript">import { watch, nextTick } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+// URL ⇄ state. serialize/deserialize приходят из схемы фильтров.
+export function useUrlSync(state, { serialize, deserialize }) {
+  const route = useRoute()
+  const router = useRouter()
+  let syncingFromUrl = false        // предохранитель от цикла
+
+  function hydrate() {
+    syncingFromUrl = true
+    Object.assign(state, deserialize(route.query))
+    nextTick(() =&gt; { syncingFromUrl = false })
+  }
+
+  // state → URL (replace: не засоряем историю)
+  watch(
+    () =&gt; serialize(state),
+    (query) =&gt; {
+      if (syncingFromUrl) return     // изменение пришло из URL — не пишем обратно
+      router.replace({ query }).catch(() =&gt; {})
+    },
+    { deep: true },
+  )
+
+  // back / forward / внешнее изменение URL → state
+  watch(() =&gt; route.query, hydrate)
+
+  hydrate()                          // гидрация при входе на страницу
+}</code></pre>
+  </div>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern — push вместо replace и цикл синхронизации</span>
+    <p>Два классических бага URL-синхронизации. Первый: <code>router.push</code> на каждое изменение фильтра — пользователь печатает «телефон», и в истории браузера появляется 7 записей (<code>т</code>, <code>те</code>, <code>тел</code>…), а кнопка «назад» становится бесполезной. Лечится через <code>replace</code>. Второй: без предохранителя <code>syncingFromUrl</code> watcher «state → URL» и watcher «URL → state» запускают друг друга по кругу — приложение либо зацикливается, либо мигает. Лечится флагом, который на время гидрации из URL глушит обратную запись.</p>
+  </div>
+
+  <h3>Сборка всего вместе на странице</h3>
+
+  <p>Все примитивы готовы. Страница списка с фильтрами теперь собирается декларативно, и каждый кусок поведения переиспользуем и протестирован отдельно. Обратите внимание на <code>onApply</code>: при применении фильтра <strong>обязательно сбрасываем пагинацию на первую страницу</strong>.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">vue</span><span class="file">src/pages/OrdersListPage.vue</span></div>
+<pre><code class="language-xml">&lt;script setup&gt;
+import { onMounted } from 'vue'
+import { useCrudList } from '@/composables/useCrudList'
+import { useFilters } from '@/composables/useFilters'
+import { useUrlSync } from '@/composables/useUrlSync'
+import { ordersRepository } from '@/repository/orders.repository'
+import { ordersFiltersSchema } from '@/constants/orders.filters'
+import { serializeFilters } from '@/services/queryBuilder.service'
+import { deserializeFilters } from '@/services/filterParser.service'
+
+const list = useCrudList(ordersRepository, { perPage: 25 })
+
+const filters = useFilters(ordersFiltersSchema, {
+  onApply: (applied) =&gt; {
+    list.pagination.reset()              // КРИТИЧНО: фильтр изменился → стр. 1
+    list.load(applied)                   // load учитывает фильтры (см. ниже)
+  },
+})
+
+// URL — источник правды
+useUrlSync(filters.draft, {
+  serialize: () =&gt; serializeFilters(filters.applied.value),
+  deserialize: (query) =&gt; deserializeFilters(query, ordersFiltersSchema),
+})
+
+onMounted(() =&gt; list.load(filters.applied.value))
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;OrdersFilters v-model="filters.draft" @reset="filters.reset" /&gt;
+  &lt;OrdersTable :rows="list.items" :loading="list.loading" /&gt;
+  &lt;EmptyState v-if="list.isEmpty" /&gt;
+  &lt;TablePagination :page="list.pagination.page"
+                   :total-pages="list.pagination.totalPages"
+                   @change="list.pagination.setPage" /&gt;
+&lt;/template&gt;</code></pre>
+  </div>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern — забыть сбросить страницу при смене фильтра</span>
+    <p>Пользователь на 5-й странице, применяет фильтр, который оставляет 12 результатов (одна страница). Запрос уходит с <code>page=5</code> — бэкенд возвращает пустоту, экран показывает «ничего не найдено», хотя данные есть. Классический баг, который воспроизводится только при определённой комбинации. Правило железное: <strong>любое изменение набора фильтров сбрасывает пагинацию на первую страницу</strong>. Изменение сортировки — тоже (Раздел 9).</p>
+  </div>
+
+  <h3>Типы фильтров: нюансы каждого</h3>
+
+  <h4>Поиск (search)</h4>
+  <p>Единственный фильтр с debounce. Дополнительно: триммить пробелы, игнорировать запрос короче 2–3 символов (иначе поиск по одной букве кладёт бэкенд), и обязательно отменять устаревший запрос (это уже делает <code>useCrudList</code> через <code>AbortController</code>). Связка debounce + cancel — два независимых механизма: debounce <em>откладывает</em> отправку, cancel <em>отменяет</em> уже улетевшие.</p>
+
+  <h4>Multi-select</h4>
+  <p>Состояние — массив. В query чаще всего сериализуется как CSV (<code>status=paid,new</code>) или повторяющимися ключами (<code>status=paid&amp;status=new</code>) — зависит от бэкенда, и это решение должно быть зафиксировано в сериализаторе один раз. Пустой массив = фильтр не применён (выпадает из query).</p>
+
+  <h4>Диапазон дат (date range)</h4>
+  <p>Состояние <code>{ from, to }</code>, в query — два параметра. Ловушки: таймзоны (UI показывает локальную дату, бэкенд ждёт UTC или date-only), и валидация <code>from &lt;= to</code>. Нормализацию формата делаем в одном месте — в сериализаторе, никогда в компоненте.</p>
+
+  <h4>Зависимые (nested) фильтры</h4>
+  <p>«Город» зависит от «Страны»: смена страны должна сбросить город. Это правило живёт в схеме или в обработчике, но <strong>не разбросано по шаблону</strong>. Несбрасываемый зависимый фильтр — источник невалидных комбинаций (город из другой страны), которые бэкенд молча проигнорирует или вернёт пустоту.</p>
+
+  <h4>Backend-driven фильтры</h4>
+  <p>Иногда варианты фильтра приходят с сервера (доступные статусы, динамические категории). Их грузим отдельным запросом и кэшируем — это <em>не</em> часть состояния фильтра, а его справочник опций.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/composables/useFilterOptions.js</span></div>
+<pre><code class="language-javascript">import { ref } from 'vue'
+
+// Справочники опций (статусы, категории) — кэшируются, грузятся один раз.
+const cache = new Map()
+
+export function useFilterOptions(key, loader) {
+  const options = ref(cache.get(key) ?? [])
+  const loading = ref(false)
+
+  async function ensure() {
+    if (cache.has(key)) return
+    loading.value = true
+    try {
+      const data = await loader()
+      cache.set(key, data)
+      options.value = data
+    } finally {
+      loading.value = false
+    }
+  }
+  return { options, loading, ensure }
+}</code></pre>
+  </div>
+
+  <h3>Сохранение фильтров (persistence)</h3>
+
+  <p>Два уровня сохранения, которые нельзя путать:</p>
+  <ul>
+    <li><strong>В рамках сессии навигации</strong> — это даёт URL автоматически: ушёл на карточку, вернулся — фильтры на месте, потому что они в URL.</li>
+    <li><strong>Между сессиями</strong> — сохранять ли выбранные фильтры в <code>localStorage</code>, чтобы пользователь, вернувшись завтра, увидел тот же набор. Это продуктовое решение, и применять его нужно <em>избирательно</em>: «показывать по 50 строк» сохранять полезно, а «поиск по строке X» — почти никогда (пользователь забудет, что фильтр включён, и решит, что данные пропали).</li>
+  </ul>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern — «липкие» фильтры, о которых пользователь забыл</span>
+    <p>Агрессивное сохранение всех фильтров в <code>localStorage</code> приводит к классу обращений в поддержку «у меня пропали все заказы». На деле — месяц назад пользователь выбрал статус «отменён», фильтр сохранился, и теперь список «пуст». Сохраняйте между сессиями только «настроечные» фильтры (размер страницы, видимые колонки), но не «поисковые» (текст, статус, даты) — или хотя бы делайте активные фильтры явно видимыми чипами с крестиком, чтобы пользователь понимал, почему список такой.</p>
+  </div>
+
+  <h3>Race conditions в фильтрах — полная картина</h3>
+
+  <p>Соберём все механизмы защиты от гонок, разбросанные по разделам, в одну картину. Фильтры — главный генератор гонок, потому что меняются часто и быстро.</p>
+
+  <div class="diagram"><span class="cap">Три независимых механизма против рассинхрона фильтров</span>  Пользователь быстро меняет фильтры: A → B → C
+        │
+   ┌────┴─────────────────────────────────────────┐
+   │ 1. DEBOUNCE (только search)                    │
+   │    откладывает отправку, гасит лишние запросы  │
+   ├────────────────────────────────────────────────┤
+   │ 2. CANCEL (AbortController в useCrudList)       │
+   │    запрос A,B отменяются при старте C           │
+   │    → в таблицу попадёт результат ТОЛЬКО C       │
+   ├────────────────────────────────────────────────┤
+   │ 3. controller === myController                  │
+   │    устаревший ответ не выключит loading свежего │
+   └────────────────────────────────────────────────┘
+        ▼
+   Гарантия: на экране — результат, соответствующий ТЕКУЩЕМУ состоянию UI</div>
+
+  <p>Эти три механизма ортогональны и нужны вместе. Debounce уменьшает <em>количество</em> запросов, но не спасает от гонки (два отложенных запроса всё равно могут вернуться не по порядку). Cancel <em>отменяет</em> устаревшие, но без проверки актуального контроллера завершившийся старый запрос всё равно может дёрнуть состояние. Только все три вместе дают гарантию «на экране — текущее состояние».</p>
+
+  <h3>Каталог анти-паттернов фильтрации</h3>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Анти-паттерн</th><th>Симптом</th><th>Лечение</th></tr></thead>
+    <tbody>
+      <tr><td>Логика фильтров в компоненте</td><td>дублируется в каждом списке, расходится</td><td><code>useFilters</code> + схема</td></tr>
+      <tr><td>Один deep-watch на весь объект</td><td>поиск и селект ведут себя одинаково</td><td>watch по типу фильтра</td></tr>
+      <tr><td>Пустые значения в query</td><td><code>?status=</code> → ноль результатов</td><td><code>isEmpty</code> выпадает из query</td></tr>
+      <tr><td>Нет сброса page при смене фильтра</td><td>«ничего не найдено» на стр. 5</td><td><code>pagination.reset()</code> в <code>onApply</code></td></tr>
+      <tr><td>Нет отмены запросов</td><td>в таблице результат не последнего запроса</td><td><code>AbortController</code></td></tr>
+      <tr><td><code>push</code> вместо <code>replace</code> в URL</td><td>история засорена, «назад» сломан</td><td><code>router.replace</code></td></tr>
+      <tr><td>State главный, URL — забыт</td><td>F5 сбрасывает, ссылку не пошлёшь</td><td>URL как источник правды</td></tr>
+      <tr><td>Липкие фильтры в localStorage</td><td>«пропали все данные»</td><td>сохранять только настроечные</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box ent">
+    <span class="tag">■ Enterprise Recommendation</span>
+    <p>Сделайте систему фильтров <strong>единым механизмом на весь проект</strong>: схема + <code>useFilters</code> + <code>queryBuilder</code> + <code>useUrlSync</code>. Тогда новый список с фильтрами — это новая <em>схема</em> (декларативный массив) плюс presentational-компонент фильтров, а не новая реализация логики. Это прямой ответ на вопрос из Раздела 1 «сколько файлов тронуть, чтобы добавить фильтр»: <em>один</em> — строку в схеме. Любая команда, которая реализует фильтрацию заново на каждом экране, через год получает пятьдесят слегка различающихся фильтр-движков и баг-репорты, которые не воспроизводятся между экранами.</p>
+  </div>
+
+  <div class="box scale">
+    <span class="tag">▣ Scaling Note</span>
+    <p>Когда схем становится много, вынесите общие куски (пагинация, сортировка, поиск) в базовую схему и расширяйте её доменными фильтрами. И заранее договоритесь с бэкендом о <strong>едином контракте query</strong> для всех списков (как сериализуются массивы, диапазоны, сортировка) — иначе сериализатор обрастёт доменными исключениями (<code>if (resource === 'orders') ...</code>), и его переиспользуемость, ради которой всё затевалось, испарится. Единый контракт query на бэкенде — это половина успеха единого фронтенд-фильтра.</p>
+  </div>
+
+  <p>Фильтры и список готовы и переиспользуемы. Но мы упёрлись в тему, которая заслуживает отдельного глубокого разбора, — как именно превращать состояние приложения в данные для сервера. Следующий раздел, Payload Architecture, систематизирует сериализацию, нормализацию, DTO-маппинг и сборку тела запроса для форм и сложных вложенных структур.</p>
+</section>
+
+<!-- ============ SECTION 7 ============ -->
+<section class="chapter" id="s7">
+  <h2 class="sec"><span class="secnum">Раздел 07</span>Payload Architecture</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">Payload — это то, что фронтенд отправляет на сервер. И это место, где встречаются две модели данных: «удобная для UI» и «требуемая контрактом». Между ними лежит трансформация — триммирование, нормализация дат и булевых, отбрасывание пустого, переименование ключей, сборка вложенных структур. Когда эта трансформация размазана по формам, возникает <em>payload drift</em>: каждая форма собирает тело запроса чуть по-своему, и интеграция превращается в бесконечную охоту за «бэкенд не принял».</p>
+
+  <h3>Две модели данных и граница между ними</h3>
+
+  <p>UI-модель оптимизирована для удобства компонентов: <code>customerName</code>, <code>deliveryDate</code> как объект <code>Date</code>, булев флаг <code>onlyPaid</code>. API-модель оптимизирована для контракта: <code>customer_id</code>, <code>delivery_date</code> как ISO-строка, <code>only_paid</code> как <code>1</code>/<code>0</code>. Граница между ними — это <strong>payload builder</strong>, зеркальное отражение <code>queryBuilder</code> из Раздела 6.</p>
+
+  <div class="diagram"><span class="cap">Payload pipeline — UI-модель проходит через конвейер чистых трансформаций в DTO</span>  <b>UI-модель</b> (форма, реактивная)
+   { customerName: ' Иван ', deliveryDate: Date, comment: '', onlyPaid: true }
+        │
+        ▼  buildPayload(model, [ ...transforms ])
+   ┌─────────────────────────────────────────────┐
+   │ trimStrings      ' Иван ' → 'Иван'            │
+   │ emptyToNull      comment: '' → null           │
+   │ normalizeDates   Date → '2024-01-15'          │
+   │ normalizeBoolean true → 1                     │
+   │ renameKeys       customerName → customer_id*  │
+   │ pick(whitelist)  убрать UI-поля вне контракта │
+   └─────────────────────────────────────────────┘
+        │
+        ▼
+  <b>DTO</b> (тело запроса)
+   { customer_id: ..., delivery_date: '2024-01-15', comment: null, only_paid: 1 }
+        │
+        ▼  repository.create/update → httpClient → Backend API</div>
+
+  <h3>Конвейер трансформаций</h3>
+
+  <p>Ключевая идея — <strong>payload собирается конвейером маленьких чистых функций</strong>, а не одной большой функцией с ветвлениями. Каждая трансформация делает одну вещь, тестируется изолированно и переиспользуется между доменами. Это прямое применение принципа из Раздела 3 («одна ответственность») к данным.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/services/payload/buildPayload.js</span></div>
+<pre><code class="language-javascript">// Конвейер: модель прогоняется через список трансформаций слева направо.
+// Каждая трансформация — чистая функция (obj) =&gt; obj.
+export function buildPayload(model, transforms = []) {
+  return transforms.reduce((acc, transform) =&gt; transform(acc), { ...model })
+}</code></pre>
+  </div>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/services/payload/transforms.js</span></div>
+<pre><code class="language-javascript">import { formatDate } from '@/utils/date'
+
+// Триммим все строковые значения.
+export function trimStrings(obj) {
+  const out = {}
+  for (const [k, v] of Object.entries(obj)) {
+    out[k] = typeof v === 'string' ? v.trim() : v
+  }
+  return out
+}
+
+// Пустые строки → null (типичный контракт: «значения нет»).
+export function emptyToNull(obj) {
+  const out = {}
+  for (const [k, v] of Object.entries(obj)) {
+    out[k] = v === '' ? null : v
+  }
+  return out
+}
+
+// Удаляем ключи с null/undefined (для PATCH — отправляем только заданное).
+export function omitNullish(obj) {
+  const out = {}
+  for (const [k, v] of Object.entries(obj)) {
+    if (v != null) out[k] = v
+  }
+  return out
+}
+
+// Нормализация дат: Date | string → ISO-строка нужного формата.
+export function normalizeDates(fields) {
+  return (obj) =&gt; {
+    const out = { ...obj }
+    for (const f of fields) if (out[f] != null) out[f] = formatDate(out[f])
+    return out
+  }
+}
+
+// Нормализация булевых: true/false → 1/0 (если контракт этого требует).
+export function booleansToInt(fields) {
+  return (obj) =&gt; {
+    const out = { ...obj }
+    for (const f of fields) if (typeof out[f] === 'boolean') out[f] = out[f] ? 1 : 0
+    return out
+  }
+}
+
+// Переименование UI-ключей в API-ключи (часть DTO-маппинга).
+export function renameKeys(map) {
+  return (obj) =&gt; {
+    const out = {}
+    for (const [k, v] of Object.entries(obj)) out[map[k] ?? k] = v
+    return out
+  }
+}
+
+// Whitelist: оставляем только поля контракта, отбрасываем UI-мусор.
+export function pick(keys) {
+  return (obj) =&gt; keys.reduce((acc, k) =&gt; {
+    if (k in obj) acc[k] = obj[k]
+    return acc
+  }, {})
+}</code></pre>
+  </div>
+
+  <p>Теперь маппер заказа из Раздела 4 превращается в декларативный конвейер — по нему сразу видно, <em>что именно</em> происходит с данными и в каком порядке:</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/repository/adapters/order.adapter.js (mapOrderToApi)</span></div>
+<pre><code class="language-javascript">import { buildPayload } from '@/services/payload/buildPayload'
+import {
+  trimStrings, emptyToNull, normalizeDates,
+  booleansToInt, renameKeys, pick,
+} from '@/services/payload/transforms'
+
+export function mapOrderToApi(model) {
+  return buildPayload(model, [
+    trimStrings,
+    emptyToNull,
+    normalizeDates(['deliveryDate']),
+    booleansToInt(['onlyPaid']),
+    renameKeys({
+      customerId: 'customer_id',
+      deliveryDate: 'delivery_date',
+      onlyPaid: 'only_paid',
+    }),
+    // финальный whitelist по контракту — гарантия отсутствия лишних полей
+    pick(['customer_id', 'status', 'delivery_date', 'only_paid', 'comment', 'items']),
+  ])
+}</code></pre>
+  </div>
+
+  <div class="box best">
+    <span class="tag">✦ Best Practice — whitelist в конце конвейера</span>
+    <p>Завершайте сборку payload через <code>pick(контракт)</code>. Это страховка от целого класса проблем: реактивная UI-модель легко обрастает служебными полями (<code>_isDirty</code>, <code>__rowId</code>, временные флаги, остатки от <code>v-model</code>), и без whitelist они утекут в запрос. Бэкенды реагируют по-разному: одни молча игнорируют лишнее, другие падают со strict-валидацией, третьи — что хуже всего — <em>сохраняют</em> мусорное поле. Whitelist делает контракт явным и видимым прямо в коде маппера.</p>
+  </div>
+
+  <h3>Вложенный payload</h3>
+
+  <p>Заказ содержит позиции (<code>items</code>), каждая — со своей структурой. Вложенные структуры маппятся <em>своим</em> маппером, который вызывается внутри родительского. Не пытайтесь обработать вложенность одним плоским конвейером — это путь к нечитаемому коду.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/repository/adapters/orderItem.adapter.js</span></div>
+<pre><code class="language-javascript">import { buildPayload } from '@/services/payload/buildPayload'
+import { renameKeys, pick, omitNullish } from '@/services/payload/transforms'
+
+export function mapOrderItemToApi(item) {
+  return buildPayload(item, [
+    renameKeys({ productId: 'product_id', qty: 'quantity' }),
+    omitNullish,
+    pick(['product_id', 'quantity', 'discount']),
+  ])
+}
+
+// В родительском маппере вложенность собирается отдельным маппером:
+//   items: model.items.map(mapOrderItemToApi)</code></pre>
+  </div>
+
+  <h3>Динамический payload</h3>
+
+  <p>Часто состав полей зависит от значения другого поля: способ оплаты «карта» требует одни поля, «счёт» — другие. Соблазн — собрать всё и отправить с пустыми лишними полями. Правильно — <strong>включать в payload только релевантные ветке поля</strong>, иначе бэкенд получает противоречивые данные (и карту, и реквизиты счёта одновременно).</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/services/payload/buildPaymentPayload.js</span></div>
+<pre><code class="language-javascript">export function buildPaymentPayload(model) {
+  const base = { amount: model.amount, currency: model.currency, method: model.method }
+
+  // ветвление по типу — только релевантные поля попадают в payload
+  switch (model.method) {
+    case 'card':
+      return { ...base, card_token: model.cardToken }
+    case 'invoice':
+      return { ...base, company_inn: model.inn, account: model.account }
+    case 'wallet':
+      return { ...base, wallet_id: model.walletId }
+    default:
+      throw new Error(`Неизвестный способ оплаты: ${model.method}`)
+  }
+}</code></pre>
+  </div>
+
+  <h3>multipart/form-data</h3>
+
+  <p>Загрузка файлов требует <code>FormData</code> вместо JSON. Сборка вложенных структур в <code>FormData</code> — отдельная боль (плоские ключи вида <code>items[0][product_id]</code>), которую нужно вынести в утилиту раз и навсегда, а не писать руками в каждой форме загрузки.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/services/payload/toFormData.js</span></div>
+<pre><code class="language-javascript">// Рекурсивно раскладывает объект (включая файлы и вложенность) в FormData.
+export function toFormData(obj, form = new FormData(), prefix = '') {
+  for (const [key, value] of Object.entries(obj)) {
+    const field = prefix ? `${prefix}[${key}]` : key
+    if (value == null) continue
+
+    if (value instanceof File) {
+      form.append(field, value)
+    } else if (value instanceof Date) {
+      form.append(field, value.toISOString())
+    } else if (Array.isArray(value)) {
+      value.forEach((item, i) =&gt; {
+        if (item instanceof File) form.append(`${field}[]`, item)
+        else if (typeof item === 'object') toFormData(item, form, `${field}[${i}]`)
+        else form.append(`${field}[]`, item)
+      })
+    } else if (typeof value === 'object') {
+      toFormData(value, form, field)            // вложенный объект
+    } else {
+      form.append(field, value)
+    }
+  }
+  return form
+}</code></pre>
+  </div>
+
+  <div class="box arch">
+    <span class="tag">◆ Architecture Note — Content-Type при multipart</span>
+    <p>Когда отправляете <code>FormData</code>, <strong>не выставляйте <code>Content-Type</code> вручную</strong>. Браузер сам проставит <code>multipart/form-data</code> с правильным <code>boundary</code>; ручной заголовок (часто скопированный из JSON-запроса) затрёт boundary, и сервер не сможет распарсить тело. Если в Разделе 2 у <code>httpClient</code> стоит дефолтный <code>Content-Type: application/json</code> — в запросе с <code>FormData</code> этот заголовок нужно <em>удалить</em>, а не переопределить. Это частая причина «загрузка файла не работает только в проде».</p>
+  </div>
+
+  <h3>Валидация ≠ сериализация</h3>
+
+  <p>Важно не смешивать два этапа. <strong>Валидация</strong> отвечает на вопрос «корректны ли данные» и происходит <em>до</em> сборки payload (клиентская проверка) и на сервере. <strong>Сериализация</strong> отвечает на вопрос «в какой форме отправить» и происходит после. Серверные ошибки валидации возвращаются как <code>ApiError.fields</code> (Раздел 4) и раскладываются на форму через <code>useEntityForm</code> (Раздел 5). Клиентская валидация — это отдельный слой проверок перед <code>submit</code>, не часть payload builder.</p>
+
+  <h3>Плохой и хороший payload</h3>
+
+  <div class="dual">
+    <div>
+      <div class="label-bad">✗ Payload «как есть»</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">json</span></div>
+<pre><code class="language-json">{
+  "customerName": "  Иван  ",
+  "deliveryDate": "15.01.2024",
+  "comment": "",
+  "onlyPaid": "true",
+  "_isDirty": true,
+  "__rowId": 42,
+  "status": "new"
+}</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="label-good">✓ После конвейера</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">json</span></div>
+<pre><code class="language-json">{
+  "customer_id": 7,
+  "delivery_date": "2024-01-15",
+  "comment": null,
+  "only_paid": 1,
+  "status": "new"
+}</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <p>Слева — то, что улетает на бэкенд при ручной сборке: непротриммленное имя, дата в локальном формате, пустая строка вместо <code>null</code>, булев как строка <code>"true"</code>, и два служебных UI-поля. Справа — результат конвейера: чисто, по контракту, предсказуемо.</p>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern — payload drift</span>
+    <p>Когда каждая форма собирает тело запроса в своём <code>&lt;script setup&gt;</code>, формат «расползается»: на одном экране дата уходит как <code>"2024-01-15"</code>, на другом — как <code>"15.01.2024"</code>, на третьем — как timestamp. Булев флаг где-то <code>true</code>, где-то <code>1</code>, где-то <code>"on"</code>. Бэкенд вынужден принимать «и так, и сяк», обрастает костылями, и однажды нормализацию на бэкенде убирают — и половина форм ломается. Единый набор трансформаций и общий <code>buildPayload</code> устраняют drift на корню: формат задан в одном месте.</p>
+  </div>
+
+  <div class="box scale">
+    <span class="tag">▣ Scaling Note</span>
+    <p>Трансформации payload и query (Раздел 6) — это один и тот же класс задач: «привести данные приложения к контракту». Держите их рядом в <code>services/</code> и переиспользуйте (нормализация дат одна на проект). Когда контракт даты меняется глобально (бэкенд переходит с date-only на datetime с таймзоной), вы правите <em>одну</em> функцию <code>formatDate</code> — и это распространяется на все формы и все фильтры сразу. Это и есть дивиденд от вынесенной сериализации: глобальное изменение контракта = точечная правка.</p>
+  </div>
+
+  <div class="box ent">
+    <span class="tag">■ Enterprise Recommendation</span>
+    <p>Договоритесь с командой о <strong>стандартном наборе трансформаций</strong> и порядке их применения (trim → emptyToNull → normalize → rename → pick). Зафиксируйте в <code>PAYLOAD.md</code>. Когда конвейер стандартен, code-review payload-маппера занимает секунды: ревьюер читает список трансформаций как чек-лист, а не разбирает уникальную логику сборки в каждой форме. Нестандартная ручная сборка payload в компоненте должна быть таким же стоп-сигналом на ревью, как прямой вызов <code>axios</code>.</p>
+  </div>
+</section>
+
+<!-- ============ SECTION 8 ============ -->
+<section class="chapter" id="s8">
+  <h2 class="sec"><span class="secnum">Раздел 08</span>State Management</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">Главная ошибка в управлении состоянием — не «неправильный store», а <em>лишний</em> store. Pinia соблазняет складывать туда всё подряд, и через год проект имеет десяток «божественных» сторов, знающих обо всём и связанных со всем. В этом разделе — когда состояние действительно требует store, какие типы сторов бывают, и как не превратить state-слой в новую свалку взамен «компонентов-помоек».</p>
+
+  <h3>Когда нужен store, а когда — нет</h3>
+
+  <p>Это решение принимается по одному критерию: <strong>время жизни и область видимости состояния</strong>. Не по «важности данных» и не по привычке.</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Состояние</th><th>Где держать</th><th>Почему</th></tr></thead>
+    <tbody>
+      <tr><td>Данные списка на одном экране</td><td><span class="t-good">composable</span> (локальный <code>useCrudList</code>)</td><td>умирают вместе с экраном</td></tr>
+      <tr><td>Состояние формы</td><td><span class="t-good">composable</span> (<code>useEntityForm</code>)</td><td>локально для формы</td></tr>
+      <tr><td>Текущий пользователь, права</td><td><span class="t-bad">store</span> (<code>auth</code>)</td><td>нужны везде, живут всю сессию</td></tr>
+      <tr><td>Глобальные тосты, модалки, тема</td><td><span class="t-bad">store</span> (<code>ui</code>)</td><td>общий UI поверх всех экранов</td></tr>
+      <tr><td>Справочники (статусы, валюты)</td><td><span class="t-bad">store</span> (кэш)</td><td>переиспользуются многими экранами</td></tr>
+      <tr><td>Сущность, открытая на нескольких экранах</td><td><span class="t-bad">store</span> (entity-кэш)</td><td>общий источник, чтобы не грузить дважды</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box arch">
+    <span class="tag">◆ Architecture Note — store не равно «глобальная переменная»</span>
+    <p>Самый частый антипаттерн начинающих с Pinia — заводить store на <em>каждый</em> экран («ordersPageStore», «userFormStore»). Это возвращает все болезни глобального состояния: данные одного экрана живут после ухода с него, два экземпляра экрана делят состояние, тесты текут друг в друга. Правило: <strong>если состояние не нужно вне одного экрана и не должно переживать навигацию — это composable с локальным <code>ref</code>, а не store</strong>. Store — для состояния, которое по своей природе <em>разделяемое</em> или <em>долгоживущее</em>.</p>
+  </div>
+
+  <h3>Три типа сторов</h3>
+
+  <div class="diagram"><span class="cap">Таксономия сторов — у каждого своя зона ответственности</span>  <b>UI store</b>            <b>Domain / Entity store</b>        <b>Session store</b>
+  ─────────             ──────────────────────        ───────────
+  тосты                 кэш сущностей по id            токены (auth)
+  модалки (глобальные)  справочники (статусы)          текущий пользователь
+  тема, сайдбар         нормализованные коллекции      права/роли
+  global loading        ensure(id) с кэшем             feature-флаги
+       │                       │                            │
+       └───────────── НЕ хранят локальное состояние экранов ─┘
+                      (списки, формы — это composables)</div>
+
+  <h4>Session store — auth (используется в interceptors)</h4>
+  <p>Стор, на который опирается весь слой данных. Хранит токены и текущего пользователя, синхронизирует токен с хранилищем. Именно его дёргают interceptors из Раздела 4.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/store/auth.store.js</span></div>
+<pre><code class="language-javascript">import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+
+// Setup-синтаксис Pinia: ближе всего к Composition API.
+export const useAuthStore = defineStore('auth', () =&gt; {
+  const accessToken = ref(localStorage.getItem('access_token'))
+  const refreshToken = ref(localStorage.getItem('refresh_token'))
+  const user = ref(null)
+
+  const isAuthenticated = computed(() =&gt; !!accessToken.value)
+  const can = computed(() =&gt; (permission) =&gt; user.value?.permissions?.includes(permission))
+
+  function setAccessToken(token) {
+    accessToken.value = token
+    localStorage.setItem('access_token', token)
+  }
+  function logout() {
+    accessToken.value = null
+    refreshToken.value = null
+    user.value = null
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+  }
+  return { accessToken, refreshToken, user, isAuthenticated, can, setAccessToken, logout }
+})</code></pre>
+  </div>
+
+  <h4>UI store — тосты и глобальные оверлеи</h4>
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/store/ui.store.js</span></div>
+<pre><code class="language-javascript">import { defineStore } from 'pinia'
+import { ref } from 'vue'
+
+export const useUiStore = defineStore('ui', () =&gt; {
+  const toasts = ref([])
+  let seq = 0
+
+  function notify(message, type = 'info') {
+    const id = ++seq
+    toasts.value = [...toasts.value, { id, message, type }]
+    setTimeout(() =&gt; dismiss(id), 5000)
+  }
+  function dismiss(id) {
+    toasts.value = toasts.value.filter((t) =&gt; t.id !== id)
+  }
+  return { toasts, notify, dismiss }
+})</code></pre>
+  </div>
+
+  <h4>Entity store — кэш сущностей по id</h4>
+  <p>Когда одна и та же сущность открывается на разных экранах (карточка пользователя, его заказы, его профиль), грузить её каждый раз заново — расточительство. Entity-стор держит нормализованный кэш и метод <code>ensure(id)</code>, который грузит сущность только если её ещё нет.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/store/users.store.js</span></div>
+<pre><code class="language-javascript">import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+import { usersRepository } from '@/repository/users.repository'
+
+export const useUsersStore = defineStore('users', () =&gt; {
+  const byId = ref(new Map())          // нормализованный кэш: id → user
+
+  // getter с аргументом возвращает функцию (мемоизированный доступ)
+  const getById = computed(() =&gt; (id) =&gt; byId.value.get(id) ?? null)
+
+  async function ensure(id) {
+    if (byId.value.has(id)) return byId.value.get(id)  // кэш-хит
+    const user = await usersRepository.fetchById(id)
+    upsert(user)
+    return user
+  }
+  function upsert(user) {
+    const next = new Map(byId.value)   // новая ссылка → реактивность Map
+    next.set(user.id, user)
+    byId.value = next
+  }
+  function invalidate(id) {
+    const next = new Map(byId.value)
+    next.delete(id)
+    byId.value = next
+  }
+  return { byId, getById, ensure, upsert, invalidate }
+})</code></pre>
+  </div>
+
+  <div class="box scale">
+    <span class="tag">▣ Scaling Note — кэш без инвалидации опаснее, чем без кэша</span>
+    <p>Entity-кэш ускоряет UI, но создаёт риск устаревших данных: пользователь отредактировал профиль на одном экране, а другой экран показывает старую версию из кэша. Поэтому любой entity-store <strong>обязан</strong> иметь <code>invalidate(id)</code>/<code>upsert</code>, и операции update/delete (Раздел 5) должны их вызывать. Без стратегии инвалидации кэш превращается в источник «данные на разных экранах не совпадают» — а это хуже, чем лишний запрос. Для серьёзного кэширования с TTL, фоновым обновлением и дедупликацией запросов рассмотрите специализированную библиотеку (TanStack Query) вместо ручного кэша в сторе.</p>
+  </div>
+
+  <h3>Reactive pitfalls в Pinia</h3>
+
+  <h4>Деструктуризация стора ломает реактивность</h4>
+  <p>Та же ловушка, что с <code>reactive</code> в Разделе 3. Деструктуризация стора напрямую отрывает значения от реактивности. Решение — <code>storeToRefs</code> для состояния (но <em>не</em> для методов).</p>
+
+  <div class="dual">
+    <div>
+      <div class="label-bad">✗ Реактивность потеряна</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span></div>
+<pre><code class="language-javascript">const store = useAuthStore()
+// user — снимок, не обновится
+const { user, isAuthenticated } = store</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="label-good">✓ storeToRefs</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span></div>
+<pre><code class="language-javascript">import { storeToRefs } from 'pinia'
+const store = useAuthStore()
+// состояние — через storeToRefs
+const { user, isAuthenticated } = storeToRefs(store)
+// методы — напрямую со стора
+const { logout } = store</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern — gigantic store</span>
+    <p>«Божественный стор» <code>useAppStore</code>, в котором лежат и пользователь, и список заказов, и фильтры, и тосты, и тема — это «компонент-помойка» уровнем выше. Симптомы: любое изменение в сторе триггерит подписчиков, не имеющих отношения к изменению; невозможно понять, кто что использует; тесты тянут весь стор. Лечение — <strong>дробление по доменам и ответственности</strong>: отдельный стор на auth, на ui, на каждую кэшируемую сущность. Сторы маленькие, с одной зоной ответственности, как и composables.</p>
+  </div>
+
+  <h4>Состояние списков не место в сторе</h4>
+  <p>Повторим, потому что это самая частая ошибка: данные списка заказов на странице — это <code>useCrudList</code> (локальный composable), а не <code>ordersStore.list</code>. Если положить список в стор, два разных экрана со списками заказов начнут делить состояние, а уход со страницы оставит данные «висеть» в памяти. Стор для заказов уместен только как <em>кэш отдельных сущностей</em>, не как «текущий список с фильтрами».</p>
+
+  <h3>Memoization и производные данные</h3>
+
+  <p><code>computed</code>-геттеры в сторе кэшируются автоматически — пока зависимости не изменились, повторное чтение не пересчитывает. Геттер с аргументом (как <code>getById</code> выше) возвращает функцию; помните, что такая функция <em>не</em> кэширует по аргументу сама по себе — кэширование обеспечивает структура данных (Map) под ней, а не геттер.</p>
+
+  <div class="box perf">
+    <span class="tag">◈ Performance Note</span>
+    <p>Не храните в сторе данные, которые можно <em>вычислить</em> из других. Если есть <code>orders</code>, не держите рядом <code>ordersCount</code> и <code>paidOrders</code> как отдельное состояние — это <code>computed</code>. Дублирующее состояние неизбежно рассинхронизируется: кто-то обновит <code>orders</code> и забудет пересчитать <code>ordersCount</code>. Правило: <strong>в сторе — только «источник», производное — через <code>computed</code></strong>. Это снижает и количество реактивных зависимостей, и класс багов «два связанных значения разошлись».</p>
+  </div>
+
+  <div class="box ent">
+    <span class="tag">■ Enterprise Recommendation</span>
+    <p>Заведите явную классификацию сторов в проекте (session / ui / entity-cache) и правило: новый стор требует обоснования, к какому типу он относится. Это простое организационное ограничение предотвращает расползание состояния. Перед созданием стора задайте два вопроса: <em>(1)</em> это состояние нужно вне одного экрана? <em>(2)</em> оно должно пережить навигацию? Если хотя бы на один ответ «нет» — это composable, а не стор. Дисциплина на входе дешевле, чем разбор «божественного стора» через год.</p>
+  </div>
+
+  <p>Состояние под контролем: разделяемое — в маленьких типизированных сторах, локальное — в composables, производное — в <code>computed</code>. Дальше переходим к самому нагруженному UI enterprise-приложений — таблицам, где сходятся серверная пагинация, сортировка, виртуализация и производительность рендера больших списков.</p>
+</section>
+
+<!-- ============ SECTION 9 ============ -->
+<section class="chapter" id="s9">
+  <h2 class="sec"><span class="secnum">Раздел 09</span>Работа с таблицами</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">Таблица — самый нагруженный UI enterprise-приложения. В ней сходятся всё, что мы строили: серверная пагинация (Раздел 3), фильтры (Раздел 6), сортировка, выбор строк, row- и batch-действия (Раздел 5) и, на больших объёмах, виртуализация. Хорошая таблица — это <em>презентационный</em> компонент, который ничего не знает про источник данных: ему дают строки, описание колонок и текущую сортировку, а он рисует и сообщает о событиях.</p>
+
+  <h3>Декларативное описание колонок</h3>
+
+  <p>По аналогии со схемой фильтров, колонки описываются данными, а не разметкой. Это убирает копипасту <code>&lt;th&gt;</code>/<code>&lt;td&gt;</code> из каждого экрана и делает таблицу конфигурируемой.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/constants/orders.columns.js</span></div>
+<pre><code class="language-javascript">import { formatMoney, formatDate } from '@/utils/format'
+
+export const ordersColumns = [
+  { key: 'number', label: '№', sortable: true, width: 90 },
+  { key: 'customerName', label: 'Клиент' },
+  { key: 'status', label: 'Статус', sortable: true, cell: 'status' }, // именованный слот
+  { key: 'total', label: 'Сумма', sortable: true, align: 'right', format: formatMoney },
+  { key: 'createdAt', label: 'Создан', sortable: true, format: formatDate },
+]</code></pre>
+  </div>
+
+  <h3>BaseTable — переиспользуемый презентационный компонент</h3>
+
+  <p>Главный принцип: таблица получает всё через props и сообщает наружу через emit. Слоты позволяют переопределить рендер конкретной ячейки (бейдж статуса, кнопки действий), не ломая универсальность. Обратите внимание на <code>v-memo</code> — он пропускает повторный рендер строки, если её данные и сортировка не изменились (Раздел 10).</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">vue</span><span class="file">src/components/BaseTable.vue</span></div>
+<pre><code class="language-xml">&lt;script setup&gt;
+defineProps({
+  columns: { type: Array, required: true },
+  rows: { type: Array, default: () =&gt; [] },
+  loading: Boolean,
+  sort: { type: Object, default: null },   // { field, order } | null
+  rowKey: { type: String, default: 'id' },
+})
+const emit = defineEmits(['sort', 'row-click'])
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;table class="b-table"&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th
+          v-for="col in columns" :key="col.key"
+          :style="{ width: col.width + 'px', textAlign: col.align }"
+          :class="{ sortable: col.sortable }"
+          @click="col.sortable &amp;&amp; emit('sort', col.key)"
+        &gt;
+          {{ col.label }}
+          &lt;SortIcon v-if="col.sortable"
+                    :state="sort?.field === col.key ? sort.order : null" /&gt;
+        &lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr
+        v-for="row in rows" :key="row[rowKey]"
+        v-memo="[row, sort]"
+        @click="emit('row-click', row)"
+      &gt;
+        &lt;td v-for="col in columns" :key="col.key" :style="{ textAlign: col.align }"&gt;
+          &lt;!-- слот для кастомной ячейки, иначе format(value) --&gt;
+          &lt;slot :name="`cell-${col.key}`" :row="row" :value="row[col.key]"&gt;
+            {{ col.format ? col.format(row[col.key]) : row[col.key] }}
+          &lt;/slot&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/template&gt;</code></pre>
+  </div>
+
+  <p>Страница связывает таблицу с данными и переопределяет только нужные ячейки слотами:</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">vue</span><span class="file">OrdersListPage.vue (фрагмент шаблона)</span></div>
+<pre><code class="language-xml">&lt;BaseTable
+  :columns="ordersColumns"
+  :rows="list.items"
+  :loading="list.loading"
+  :sort="list.table.sort"
+  @sort="onSort"
+  @row-click="goToOrder"
+&gt;
+  &lt;!-- кастомный рендер статуса --&gt;
+  &lt;template #cell-status="{ value }"&gt;
+    &lt;StatusBadge :status="value" /&gt;
+  &lt;/template&gt;
+&lt;/BaseTable&gt;</code></pre>
+  </div>
+
+  <div class="box arch">
+    <span class="tag">◆ Architecture Note — сортировка серверная, не клиентская</span>
+    <p>В enterprise-таблице сортировка почти всегда <strong>серверная</strong>: на экране 25 строк из 40 000, и сортировать клиентски бессмысленно — вы отсортируете только текущую страницу. Клик по заголовку меняет <code>table.sort</code> (Раздел 3), это уходит в query (<code>sort=-createdAt</code>, Раздел 6) и перезагружает данные. Клиентская сортировка допустима только когда <em>весь</em> набор уже на клиенте (маленький справочник). Смешивать их нельзя: «отсортированная клиентски страница серверно-пагинированного списка» — это гарантированно неверный порядок. И помните правило из Раздела 6: <strong>смена сортировки сбрасывает пагинацию на первую страницу</strong>.</p>
+  </div>
+
+  <h3>Виртуализация (virtual scrolling)</h3>
+
+  <p>Когда нужно показать тысячи строк <em>без</em> пагинации (журнал событий, большой справочник), рендер всех <code>&lt;tr&gt;</code> убивает производительность: десятки тысяч DOM-узлов тормозят прокрутку и съедают память. Виртуализация рендерит только видимые строки плюс небольшой запас (overscan), а остальное «симулирует» через высоту контейнера.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/composables/useVirtualRows.js</span></div>
+<pre><code class="language-javascript">import { ref, computed } from 'vue'
+
+// Окно видимых строк. Рендерим только их, остальное — пустое пространство по высоте.
+export function useVirtualRows(rows, { rowHeight = 44, overscan = 6 } = {}) {
+  const scrollTop = ref(0)
+  const viewport = ref(600)
+
+  const totalHeight = computed(() =&gt; rows.value.length * rowHeight)
+  const start = computed(() =&gt;
+    Math.max(0, Math.floor(scrollTop.value / rowHeight) - overscan),
+  )
+  const visibleCount = computed(() =&gt;
+    Math.ceil(viewport.value / rowHeight) + overscan * 2,
+  )
+  const end = computed(() =&gt;
+    Math.min(rows.value.length, start.value + visibleCount.value),
+  )
+  // только видимый срез + абсолютная позиция каждой строки
+  const slice = computed(() =&gt;
+    rows.value.slice(start.value, end.value).map((row, i) =&gt; ({
+      row,
+      top: (start.value + i) * rowHeight,
+    })),
+  )
+
+  function onScroll(e) { scrollTop.value = e.target.scrollTop }
+  return { totalHeight, slice, rowHeight, viewport, onScroll }
+}</code></pre>
+  </div>
+
+  <div class="box perf">
+    <span class="tag">◈ Performance Note — пагинация ИЛИ виртуализация, не обе сразу</span>
+    <p>Серверная пагинация и виртуализация решают одну проблему (не рендерить лишнее) разными способами и обычно <strong>взаимоисключающи</strong>. Если данные пагинированы по 25 — виртуализация не нужна, на экране и так мало строк. Виртуализация оправдана для длинных <em>непагинированных</em> списков (бесконечная лента, журнал). Применять обе одновременно — переусложнение. Для production предпочтите проверенную библиотеку (<code>vue-virtual-scroller</code>, TanStack Virtual): ручная виртуализация выше — для понимания механики, в бою важны крайние случаи (переменная высота строк, динамическая подгрузка), которые библиотеки уже решили.</p>
+  </div>
+
+  <h3>Row actions и batch actions</h3>
+
+  <p>Действия со строкой (редактировать, удалить) и групповые действия (удалить выделенные) — это слот в таблице и панель массовых операций, опирающаяся на <code>selectedIds</code> из <code>useTableState</code> (Раздел 3). Логика самих действий — в <code>useCrud</code> (Раздел 5), таблица только эмитит событие.</p>
+
+  <div class="diagram"><span class="cap">Reusable table architecture — данные сверху вниз, события снизу вверх</span>  <b>useCrud(repository)</b>  (Раздел 5: список + форма + действия)
+        │ items, loading, sort, selectedIds        ▲ @sort @row-click @edit @delete
+        ▼                                          │
+  <b>OrdersListPage</b>  (оркестрация: связывает данные и события)
+        │ :columns :rows :loading :sort            ▲ emit
+        ▼                                          │
+  <b>BaseTable</b>  (презентация: рисует, ничего не знает про источник)
+     ├─ slot #cell-status  ──▶ StatusBadge
+     └─ slot #cell-actions ──▶ RowActions (@edit @delete)
+        │
+        ▼ при выделении
+  <b>BatchActionsBar</b>  (selectedCount &gt; 0 → массовые операции)</div>
+
+  <div class="box best">
+    <span class="tag">✦ Best Practice — таблица не ходит за данными</span>
+    <p><code>BaseTable</code> не импортирует ни store, ни repository, ни composables загрузки. Это презентационный компонент в чистом виде: props внутрь, emit наружу (правило «контейнер/презентация» из Раздела 2). Благодаря этому одна и та же таблица обслуживает заказы, пользователей, товары — отличаются только <code>columns</code> и слоты ячеек. Как только таблица начинает сама грузить данные или знать про конкретный домен — она перестаёт быть переиспользуемой, и вы возвращаетесь к «по таблице на каждый экран».</p>
+  </div>
+
+  <div class="box scale">
+    <span class="tag">▣ Scaling Note</span>
+    <p>Состояние таблицы со временем обрастает требованиями: сохранение видимых колонок и их порядка, закрепление столбцов, изменяемая ширина, экспорт. Заложите это в схему колонок и в (опциональный) per-user пресет, сохраняемый между сессиями (как «настроечные» фильтры из Раздела 6). Главное — чтобы новое требование к таблицам реализовывалось <em>один раз</em> в <code>BaseTable</code> и схеме, а не вкручивалось в каждую таблицу отдельно. Таблица — это место, где соблазн «быстро поправить вот тут локально» наиболее силён и наиболее разрушителен для единообразия.</p>
+  </div>
+</section>
+
+<!-- ============ SECTION 10 ============ -->
+<section class="chapter" id="s10">
+  <h2 class="sec"><span class="secnum">Раздел 10</span>Производительность</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">Производительность фронтенда — это в основном про <em>лишнюю работу</em>: лишние перерисовки, лишние пересчёты реактивности, лишний код в начальном бандле, неубранные подписки. В enterprise-приложениях с тяжёлыми таблицами и формами эти издержки накапливаются незаметно, пока экран не начинает «задумываться». Разберём главные источники и инструменты.</p>
+
+  <h3>Реактивность: где она дорогая</h3>
+
+  <p>Реактивность Vue 3 эффективна, но не бесплатна. Стоимость возникает там, где её не ждут.</p>
+
+  <ul>
+    <li><strong>Глубокий <code>watch</code> на большой структуре.</strong> <code>{ deep: true }</code> обходит весь объект при каждом изменении. На массиве в тысячи элементов это заметно. Следите за зависимостями точечно (watch конкретного поля), а не «всё целиком».</li>
+    <li><strong>Метод в шаблоне вместо <code>computed</code>.</strong> <code>{{ format(row) }}</code> вызывается на <em>каждый</em> рендер; <code>computed</code> кэшируется. Для производных значений — всегда <code>computed</code>.</li>
+    <li><strong>Глубокая реактивность больших, неизменяемых данных.</strong> Если массив из 10 000 строк только читается, оборачивать его в <code>ref</code> (глубокая реактивность каждого элемента) — расточительство. Используйте <code>shallowRef</code> + <code>markRaw</code>.</li>
+  </ul>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">shallowRef / markRaw для больших read-only данных</span></div>
+<pre><code class="language-javascript">import { shallowRef, markRaw } from 'vue'
+
+// Большой набор только для чтения: НЕ делаем каждый элемент реактивным.
+// shallowRef — реактивна только замена .value целиком.
+// markRaw — Vue не будет проксировать вложенность.
+const rows = shallowRef(markRaw(bigReadOnlyArray))
+
+// Обновление — заменой ссылки, а не мутацией элементов:
+function setRows(next) { rows.value = markRaw(next) }</code></pre>
+  </div>
+
+  <h3>Лишние перерисовки и v-memo</h3>
+
+  <p>При обновлении одной строки таблицы Vue по умолчанию проверит все строки. <code>v-memo</code> позволяет пропустить ререндер элемента, если перечисленные зависимости не изменились — критично для больших списков. И помните про <strong>ключи</strong>: <code>:key</code> должен быть стабильным id, <em>никогда</em> не индексом массива в изменяемых списках, иначе Vue перепутает элементы при вставке/удалении.</p>
+
+  <div class="dual">
+    <div>
+      <div class="label-bad">✗ key по индексу</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">xml</span></div>
+<pre><code class="language-xml">&lt;tr v-for="(row, i) in rows"
+    :key="i"&gt;
+  &lt;!-- при удалении строки
+       состояние «съедет»
+       на соседнюю --&gt;
+&lt;/tr&gt;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="label-good">✓ стабильный key + v-memo</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">xml</span></div>
+<pre><code class="language-xml">&lt;tr v-for="row in rows"
+    :key="row.id"
+    v-memo="[row, sort]"&gt;
+  &lt;!-- ререндер только если
+       row или sort изменились --&gt;
+&lt;/tr&gt;</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <h3>Code splitting и ленивая загрузка</h3>
+
+  <p>Начальный бандл должен содержать только то, что нужно для первого экрана. Всё остальное грузится по требованию. Два уровня: маршруты (ленивы по умолчанию) и тяжёлые компоненты внутри страниц.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">src/router/routes.js + defineAsyncComponent</span></div>
+<pre><code class="language-javascript">// Маршруты ленивы: каждый pages/* — отдельный чанк, грузится при переходе.
+export const routes = [
+  { path: '/orders', component: () =&gt; import('@/pages/OrdersListPage.vue') },
+  { path: '/orders/:id', component: () =&gt; import('@/pages/OrderDetailsPage.vue') },
+  { path: '/reports', component: () =&gt; import('@/pages/ReportsPage.vue') },
+]
+
+// Тяжёлый компонент внутри страницы (график, редактор) — асинхронно.
+import { defineAsyncComponent } from 'vue'
+const HeavyChart = defineAsyncComponent(() =&gt; import('@/components/HeavyChart.vue'))
+// график тянет тяжёлую либу — она не попадёт в начальный бандл страницы</code></pre>
+  </div>
+
+  <div class="box arch">
+    <span class="tag">◆ Architecture Note — почему слои из Раздела 2 это позволяют</span>
+    <p>Ленивая загрузка возможна только при чётких границах. Когда страница тянет данные через repository (а не через прямой axios, размазанный по компонентам), и тяжёлые зависимости изолированы в отдельных компонентах — резать бандл по маршрутам тривиально. В «компонентах-помойках», где всё связано со всем, динамический импорт ничего не даёт: граф зависимостей сплошной, и в начальный чанк утягивается весь хвост. <strong>Производительность сборки — следствие архитектуры, а не отдельная оптимизация.</strong></p>
+  </div>
+
+  <h3>Утечки памяти и проблемы watcher’ов</h3>
+
+  <p>Главный источник утечек в SPA — подписки, которые не сняли при размонтировании: таймеры, слушатели событий <code>window</code>, WebSocket, внешние обсерверы. Лекарство одно — снимать в <code>onScopeDispose</code> (или <code>onUnmounted</code>). Мы уже применяли это в <code>useDebounce</code> (Раздел 3); правило универсально.</p>
+
+  <div class="code">
+    <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span><span class="file">Любая внешняя подписка — с уборкой</span></div>
+<pre><code class="language-javascript">import { onScopeDispose } from 'vue'
+
+export function useWindowResize(handler) {
+  window.addEventListener('resize', handler)
+  // без этой строки слушатель переживёт компонент → утечка + лишние вызовы
+  onScopeDispose(() =&gt; window.removeEventListener('resize', handler))
+}</code></pre>
+  </div>
+
+  <div class="box warn">
+    <span class="tag">▲ Anti-Pattern — обновление состояния после unmount</span>
+    <p>Запрос/таймер стартовал, компонент размонтировали, ответ пришёл и пытается записать в <code>ref</code> мёртвого компонента. Это и утечка, и потенциальная ошибка, и «мигание» интерфейса. Защита двойная: отмена in-flight запросов через <code>AbortController</code> (Раздел 4) и снятие таймеров/подписок через <code>onScopeDispose</code> (Раздел 3). В <code>useCrudList</code> проверка <code>signal.aborted</code> перед записью в состояние — ровно об этом.</p>
+  </div>
+
+  <h3>Профилирование</h3>
+
+  <p>Не оптимизируйте вслепую — измеряйте. Инструменты, которые должен знать каждый в команде:</p>
+
+  <ul>
+    <li><strong>Vue DevTools → Performance / Component render.</strong> Показывает, какие компоненты перерисовываются и как часто. Неожиданно частый ререндер — первый кандидат на <code>v-memo</code>/<code>computed</code>.</li>
+    <li><strong>Chrome Performance.</strong> Запись прокрутки тяжёлой таблицы покажет long tasks и «дёргающийся» рендер.</li>
+    <li><strong>Bundle analyzer</strong> (<code>rollup-plugin-visualizer</code>). Что раздуло начальный бандл — почти всегда одна-две тяжёлые библиотеки, которые должны были быть ленивыми.</li>
+  </ul>
+
+  <div class="box ent">
+    <span class="tag">■ Enterprise Recommendation</span>
+    <p>Поставьте бюджеты производительности в CI: лимит на размер начального бандла и базовый Lighthouse-порог. Без автоматического контроля бандл растёт незаметно — каждый спринт «всего на 30 КБ», и через год первый экран весит мегабайты. Бюджет, падающий в CI при превышении, делает регресс видимым в момент его внесения, а не через полгода в виде жалоб на «тормоза». Это та же логика, что и линтер для архитектуры (Раздел 2): неутомимый автоматический страж дешевле ручной дисциплины.</p>
+  </div>
+</section>
+
+<!-- ============ SECTION 11 ============ -->
+<section class="chapter" id="s11">
+  <h2 class="sec"><span class="secnum">Раздел 11</span>Anti-Patterns</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">Сводный каталог антипаттернов enterprise-фронтенда. Большинство из них разбирались по ходу документа — здесь они собраны в одном месте как чек-лист для код-ревью и аудита проекта. Для каждого: почему это плохо, как лечится, и где в документе подробно.</p>
+
+  <h3>1. Fat components (компоненты-помойки)</h3>
+  <p><strong>Почему плохо:</strong> компонент на 1000+ строк, совмещающий загрузку, бизнес-логику, состояние и UI, невозможно тестировать, переиспользовать или безопасно менять — радиус поражения любого изменения максимален.<br><strong>Лечение:</strong> вынести логику в composables (Раздел 3), сеть в repository (Раздел 4), оставить компоненту только оркестрацию или презентацию (Раздел 2).</p>
+
+  <h3>2. Бизнес-логика в шаблоне</h3>
+  <p><strong>Почему плохо:</strong> выражения в шаблоне невозможно протестировать и переиспользовать, они вычисляются на каждый рендер, и логика дублируется между компонентами.</p>
+
+  <div class="dual">
+    <div>
+      <div class="label-bad">✗ Логика в template</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">xml</span></div>
+<pre><code class="language-xml">&lt;span :class="row.total &gt; 1000
+  &amp;&amp; row.status !== 'cancelled'
+  ? 'vip' : ''"&gt;
+  {{ (row.total * 1.2).toFixed(2) }} ₽
+&lt;/span&gt;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="label-good">✓ computed / helper</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">xml</span></div>
+<pre><code class="language-xml">&lt;span :class="{ vip: isVip(row) }"&gt;
+  {{ formatWithVat(row.total) }}
+&lt;/span&gt;
+&lt;!-- isVip, formatWithVat —
+     helpers, протестированы --&gt;</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <h3>3. Прямые вызовы axios из компонента</h3>
+  <p><strong>Почему плохо:</strong> размазанное знание о контракте, невозможность единой обработки ошибок/авторизации, утечка формы ответа в UI, нетестируемость (Раздел 4).<br><strong>Лечение:</strong> только через repository; запрет на импорт axios вне <code>api/</code> и <code>repository/</code> линтером.</p>
+
+  <h3>4. Дублированные фильтры</h3>
+  <p><strong>Почему плохо:</strong> логика фильтрации, скопированная в каждый список, расходится; одинаковые экраны ведут себя по-разному; баг чинится в N местах (Раздел 1, Раздел 6).<br><strong>Лечение:</strong> декларативная схема + <code>useFilters</code> + <code>queryBuilder</code> + <code>useUrlSync</code> — единый механизм на весь проект.</p>
+
+  <h3>5. Дублированные сборщики payload</h3>
+  <p><strong>Почему плохо:</strong> payload drift — каждая форма собирает тело запроса по-своему, формат расползается, интеграция ломается (Раздел 7).<br><strong>Лечение:</strong> единый конвейер <code>buildPayload</code> со стандартным набором трансформаций.</p>
+
+  <h3>6. Shared mutable state (общее изменяемое состояние)</h3>
+  <p><strong>Почему плохо:</strong> когда несколько мест мутируют один объект напрямую и непредсказуемо, источник изменения невозможно отследить, появляются гонки и «само поменялось».<br><strong>Лечение:</strong> разделяемое состояние — только в сторе, изменения через явные действия (Раздел 8); локальное — в composable; правило «черновик vs истина» (Раздел 5).</p>
+
+  <h3>7. Prop drilling</h3>
+  <p><strong>Почему плохо:</strong> проброс пропа через 5 уровней компонентов, которым он не нужен, связывает всю цепочку и делает рефакторинг болезненным.</p>
+
+  <div class="dual">
+    <div>
+      <div class="label-bad">✗ Проброс через все уровни</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">xml</span></div>
+<pre><code class="language-xml">&lt;Page :user="user"&gt;
+  &lt;Sidebar :user="user"&gt;
+    &lt;Menu :user="user"&gt;
+      &lt;Avatar :user="user" /&gt;
+&lt;!-- 3 уровня не используют user,
+     только передают дальше --&gt;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="label-good">✓ provide/inject или store</div>
+      <div class="code">
+        <div class="code-head"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">js</span></div>
+<pre><code class="language-javascript">// предок
+provide('user', user)
+// потомок на любой глубине
+const user = inject('user')
+// либо: useAuthStore() напрямую,
+// раз user — сессионное состояние</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <p><strong>Лечение:</strong> для сквозных данных (текущий пользователь, тема) — <code>provide/inject</code> или соответствующий стор; не пробрасывать то, что является глобальным по природе.</p>
+
+  <h3>8. Gigantic stores</h3>
+  <p><strong>Почему плохо:</strong> «божественный стор», знающий обо всём, — это fat-component на уровне состояния: любое изменение триггерит несвязанных подписчиков, ничего не изолировать, тесты текут (Раздел 8).<br><strong>Лечение:</strong> дробление по доменам и типам (session/ui/entity), маленькие сторы с одной ответственностью.</p>
+
+  <h3>9. Преждевременная абстракция</h3>
+  <p><strong>Почему плохо:</strong> обратный антипаттерн — написать <code>useUniversalEverything</code> до того, как появились реальные примеры использования, и зафиксировать неверные допущения. Абстракция из нуля примеров почти всегда неверна.<br><strong>Лечение:</strong> «правило трёх» (Раздел 2) — дублируем осознанно до третьего-четвёртого случая, затем выносим проверенную практикой абстракцию.</p>
+
+  <div class="box ent">
+    <span class="tag">■ Enterprise Recommendation — антипаттерны как чек-лист ревью</span>
+    <p>Превратите этот список в формальный чек-лист код-ревью и в правила линтера, где возможно (запрет axios вне слоя данных, запрет восходящих импортов, лимит размера файла-компонента). Антипаттерны опасны не разовым появлением, а <em>тиражированием</em>: первый прямой axios или первый fat-component создаёт прецедент, и через полгода так пишет вся команда. Дешевле всего ловить их на входе — на ревью и в CI, а не разгребать накопленный техдолг кварталами.</p>
+  </div>
+</section>
+
+<!-- ============ SECTION 12 ============ -->
+<section class="chapter" id="s12">
+  <h2 class="sec"><span class="secnum">Раздел 12</span>Заключение</h2>
+  <div class="sec-rule"></div>
+
+  <p class="lead-p">Мы прошли весь путь данных в enterprise CRUD-приложении: от структуры проекта и Composition API через слой данных, CRUD, фильтры и payload к состоянию, таблицам и производительности. Соберём это в несколько принципов, которые отличают архитектуру от набора привычек.</p>
+
+  <h3>Сквозная линия — теперь целиком</h3>
+
+  <p>В Разделе 1 мы наметили жизненный цикл данных. Теперь каждый его слой заполнен и связан с конкретным разделом документа:</p>
+
+  <div class="diagram"><span class="cap">Полный жизненный цикл данных enterprise CRUD — с указанием разделов</span>  <b>UI Component</b> (Р.2: презентация, props/emit)
+       │  действие пользователя
+       ▼
+  <b>Composable</b> (Р.3: useCrud / useFilters / usePagination)
+       │  draft → applied (Р.6), черновик → истина (Р.5)
+       ▼
+  <b>Store</b> (Р.8: только разделяемое/долгоживущее; entity-кэш)
+       │
+       ▼
+  <b>Repository</b> (Р.4: CRUD по домену, отмена, retry)
+       │
+       ├──▶ <b>Services</b> (Р.6 queryBuilder · Р.7 payloadBuilder — чистые трансформации)
+       ├──▶ <b>Adapters</b> (Р.4: DTO ⇄ доменная модель)
+       ▼
+  <b>HTTP Client</b> (Р.4: axios + interceptors: auth, 401-refresh, normalizeError)
+       │
+       ▼  ◀── защита от гонок: AbortController + controller===myController (Р.3, Р.6)
+  <b>Backend API</b>
+       │
+       └──▶ response → adapter.fromApi → store/composable → состояния loading/empty/error → рендер</div>
+
+  <h3>Как мыслит зрелый frontend engineer</h3>
+
+  <p>Разница между разработчиком, который «умеет писать компоненты», и инженером, который проектирует систему, — в нескольких устойчивых привычках мышления:</p>
+
+  <ul>
+    <li><strong>Думает о стоимости изменения, а не только о работоспособности.</strong> «Работает» — это минимум. Вопрос — сколько будет стоить добавить 51-й список и изменить контракт даты через год.</li>
+    <li><strong>Видит границы.</strong> Прежде чем писать код, отвечает: к какому слою он относится, что он может импортировать, что — нет. Граница важнее реализации.</li>
+    <li><strong>Различает разделяемое и локальное.</strong> Не тащит в стор то, что живёт на одном экране, и не дублирует в компонентах то, что должно быть общим.</li>
+    <li><strong>Проектирует под отказ.</strong> Гонки, отмена, ошибки, протухший токен, пустые состояния — не «крайние случаи на потом», а часть базового дизайна каждого списка и формы.</li>
+    <li><strong>Выносит механику, а не копирует.</strong> Видит третье повторение — выносит абстракцию. Видит первое — терпит дублирование. Знает, когда абстракция преждевременна.</li>
+    <li><strong>Закрепляет договорённости инструментами.</strong> Линтер, CI-бюджеты, документы конвенций — потому что дисциплина без инструмента деградирует под дедлайн.</li>
+  </ul>
+
+  <h3>Чек-лист зрелости архитектуры</h3>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Вопрос</th><th>Незрелый проект</th><th>Зрелый проект</th></tr></thead>
+    <tbody>
+      <tr><td>Добавить фильтр на список</td><td>править логику в компоненте</td><td>строка в схеме фильтров</td></tr>
+      <tr><td>Сменить формат даты везде</td><td>правки в 30 файлах</td><td>одна функция <code>formatDate</code></td></tr>
+      <tr><td>Глобальная обработка 401</td><td>в каждом вызове руками</td><td>один interceptor</td></tr>
+      <tr><td>Новый CRUD-экран</td><td>копипаста и неделя</td><td>конфиг + repository, часы</td></tr>
+      <tr><td>Сменить версию API</td><td>проект на квартал</td><td>адаптер в одной папке</td></tr>
+      <tr><td>Поведение 50 списков</td><td>50 вариантов, расходятся</td><td>единообразно автоматически</td></tr>
+      <tr><td>Race condition при фильтрах</td><td>«баг через раз»</td><td>отмена + проверка актуальности</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Как проектировать масштабируемые системы</h3>
+
+  <p>Масштабируемость во фронтенде — это не про «выдержать нагрузку», а про <strong>сохранить дешевизну изменений при росте кода и смене команды</strong>. Три вещи дают её надёжнее всего:</p>
+
+  <ul>
+    <li><strong>Однонаправленные зависимости и чёткие слои</strong> (Раздел 2) — ограничивают радиус поражения и делают код навигируемым.</li>
+    <li><strong>Переиспользуемая механика вместо копий</strong> (Разделы 3, 6, 7) — превращает «N реализаций одного» в «одну реализацию + N конфигов».</li>
+    <li><strong>Изоляция от внешнего мира через repository и adapters</strong> (Раздел 4) — защищает приложение от неизбежных изменений контракта бэкенда.</li>
+  </ul>
+
+  <div class="box best">
+    <span class="tag">✦ Главный принцип</span>
+    <p>Хорошая enterprise-архитектура измеряется одной фразой: <strong>«добавить новое дёшево, изменить старое дёшево, и так будет и через три года»</strong>. Всё в этом документе — слои, composables, repository, схемы фильтров, конвейеры payload, маленькие сторы — служит этой цели. Архитектура нужна не для красоты и не для ревью; она нужна, чтобы продукт, который сегодня пишут пять человек, через три года могли развивать другие пять — без страха трогать чужой экран и без копипасты как образа жизни.</p>
+  </div>
+</section>
+
+<!-- ::DOC COMPLETE:: Разделы 1–12 -->
+
+
+
+</div>
+</main>
+</div>
+
+<script>
+// syntax highlighting
+document.addEventListener('DOMContentLoaded', () =&gt; {
+  if (window.hljs) {
+    document.querySelectorAll('pre code').forEach(el =&gt; window.hljs.highlightElement(el))
+  }
+  // scrollspy для оглавления
+  const links = Array.from(document.querySelectorAll('.toc a'))
+  const map = new Map()
+  links.forEach(a =&gt; {
+    const id = a.getAttribute('href').slice(1)
+    const sec = document.getElementById(id)
+    if (sec) map.set(sec, a)
+  })
+  const obs = new IntersectionObserver((entries) =&gt; {
+    entries.forEach(e =&gt; {
+      if (e.isIntersecting) {
+        links.forEach(l =&gt; l.classList.remove('active'))
+        const a = map.get(e.target)
+        if (a) a.classList.add('active')
+      }
+    })
+  }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 })
+  map.forEach((_, sec) =&gt; obs.observe(sec))
+  // закрывать сайдбар на мобиле после клика
+  links.forEach(a =&gt; a.addEventListener('click', () =&gt; {
+    document.querySelector('.sidebar').classList.remove('open')
+  }))
+})
+</script>
+</body>
+</html>
