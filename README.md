@@ -1,3 +1,4 @@
+![preview](preview.png)
 # Enterprise Frontend Handbook: Vue 3
 
 Практичний інженерний гайд по архітектурі frontend-додатків на Vue 3 для enterprise CRUD-систем.
